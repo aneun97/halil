@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.AssetAmtSelDao"> 
+<select id="viwTotal" resultType="AssetAmtSelVo">
+SELECT DEBIT
+     , CREDIT
+     , (DEBIT - CREDIT) 	NET_DEBIT
+     , #{WK_DT}				WK_DT
+     , ASSET_LIST.WK_DT		ASSET_WK_DT
+	 , ASSET_LIST.ASSET
+	 , ASSET_LIST.ASSET_NM
+	 , ASSET_LIST.AMT
+	 , ASSET_LIST.ASSET_KIND
+	 , ASSET_LIST.ASSET_KIND_NM
+	 , ASSET_LIST.FIRM
+  FROM (SELECT SUM(AMT) DEBIT
+		  FROM (SELECT C.KR_NM
+				     , C.AMT
+				  FROM (SELECT A.WK_DT
+						     , A.ASSET
+						     , B.KR_NM
+						     , A.AMT
+						  FROM MAST_ASSET A
+						     , INFO_ASSET B
+						     , info_asset_kind C
+						 WHERE 1 = 1
+						   AND A.ASSET = B.ASSET
+						   AND B.ASSET_KIND = C.ASSET_KIND
+						   AND C.DC_TYCD = 'D'
+						   AND #{WK_DT} BETWEEN B.FROM_DT AND B.TO_DT
+						   AND A.WK_DT <![CDATA[<=]]> #{WK_DT}
+						 ORDER BY A.WK_DT DESC
+						 LIMIT 18446744073709551615
+				 		) C	 
+				 GROUP BY C.ASSET						 
+				) D
+		) DEBIT	
+	 , (SELECT SUM(AMT) CREDIT
+		  FROM (SELECT C.KR_NM
+				     , C.AMT
+				  FROM (SELECT A.WK_DT
+						     , A.ASSET
+						     , B.KR_NM
+						     , A.AMT
+						  FROM MAST_ASSET A
+						     , INFO_ASSET B
+						     , info_asset_kind C
+						 WHERE 1 = 1
+						   AND A.ASSET = B.ASSET
+						   AND B.ASSET_KIND = C.ASSET_KIND
+						   AND C.DC_TYCD	= 'C'
+						   AND #{WK_DT} BETWEEN B.FROM_DT AND B.TO_DT
+						   AND A.WK_DT <![CDATA[<=]]> #{WK_DT}
+						 ORDER BY A.WK_DT DESC
+						 LIMIT 18446744073709551615
+						) C				 
+				 GROUP BY C.ASSET				 
+				) D
+		) CREDIT
+		
+		
+	 , (SELECT D.WK_DT
+			 , D.ASSET
+			 , D.ASSET_NM
+			 , D.AMT
+			 , D.ASSET_KIND
+			 , D.ASSET_KIND_NM
+			 , D.FIRM
+		  FROM (SELECT A.WK_DT			WK_DT
+					 , A.ASSET			ASSET
+				     , B.KR_NM			ASSET_NM
+					 , A.AMT			AMT
+					 , B.ASSET_KIND		ASSET_KIND
+					 , C.KR_NM			ASSET_KIND_NM
+					 , B.FIRM			FIRM
+				  FROM MAST_ASSET A
+					 , INFO_ASSET B
+					 , INFO_ASSET_KIND C
+				 WHERE 1 = 1
+				   AND A.ASSET = B.ASSET
+				   AND B.ASSET_KIND = C.ASSET_KIND
+				   AND #{WK_DT} BETWEEN B.FROM_DT AND B.TO_DT
+				   AND A.WK_DT <![CDATA[<=]]> #{WK_DT}
+				 ORDER BY A.WK_DT DESC
+				 LIMIT 18446744073709551615
+				) D	 
+		 GROUP BY D.ASSET						 
+		) ASSET_LIST
+</select> 
+</mapper>

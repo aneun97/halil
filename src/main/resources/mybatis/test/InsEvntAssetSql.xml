@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.InsEvntAssetDao"> 
+<select id="lstEvnt" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT EVNT
+     , KR_NM
+     , RCV_TYCD
+     , PAY_TYCD
+  FROM INFO_EVNT
+</select> 
+<select id="lstAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT ASSET
+     , KR_NM
+     , ASSET_KIND
+  FROM INFO_ASSET
+</select> 
+<select id="viewEvnt" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT EVNT
+     , KR_NM
+     , RCV_TYCD
+     , PAY_TYCD
+  FROM INFO_EVNT
+ WHERE EVNT = #{EVNT}
+</select> 
+<select id="viewMastAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT A.ASSET
+     , A.KR_NM
+     , B.DC_TYCD
+     , A.CHRG_YN
+     , A.CHRG_ASSET
+     , A.CHRG_COND_AMT
+     , A.CHRG_AMT
+     , DATE_FORMAT(C.WK_DT, '%Y%m%d') BEF_WK_DT
+     , C.BEF_AMT BEF_BEF_AMT
+     , C.INC_AMT BEF_INC_AMT
+     , C.DEC_AMT BEF_DEC_AMT
+     , C.AMT BEF_AMT
+     , DATE_FORMAT(C.BEF_DT, '%Y%m%d') BEF_BEF_DT
+     , DATE_FORMAT(D.WK_DT, '%Y%m%d') AFT_WK_DT
+     , D.BEF_AMT AFT_BEF_AMT
+     , D.INC_AMT AFT_INC_AMT
+     , D.DEC_AMT AFT_DEC_AMT
+     , D.AMT AFT_AMT
+     , DATE_FORMAT(D.BEF_DT, '%Y%m%d') AFT_BEF_DT
+  FROM INFO_ASSET A
+  LEFT JOIN INFO_ASSET_KIND B
+    ON A.ASSET_KIND = B.ASSET_KIND
+  LEFT JOIN  (SELECT *
+                FROM MAST_ASSET
+               WHERE WK_DT = (
+								SELECT MAX(WK_DT)
+  		  						  FROM MAST_ASSET
+ 		 						 WHERE ASSET = (SELECT CASE WHEN ASSET_KIND='CKC' THEN PAY_ASSET ELSE ASSET END
+							  					  FROM info_asset
+							    				 WHERE ASSET = #{ASSET})
+   		   					       AND WK_DT <![CDATA[<=]]> #{WK_DT}
+ 							 ) 
+			 ) C
+    ON A.ASSET = C.ASSET
+  LEFT JOIN  (SELECT *
+                FROM mast_asset
+               WHERE WK_DT = (
+								SELECT MIN(WK_DT)
+  		  						  FROM MAST_ASSET
+ 		 						 WHERE ASSET = (SELECT CASE WHEN ASSET_KIND='CKC' THEN PAY_ASSET ELSE ASSET END
+							  					  FROM info_asset
+							    				 WHERE ASSET = #{ASSET})
+   		   					       AND WK_DT <![CDATA[>]]> #{WK_DT}
+   							 ) 
+			 ) D
+    ON A.ASSET = D.ASSET
+ WHERE 1=1
+   AND A.ASSET = (SELECT CASE WHEN ASSET_KIND='CKC' THEN PAY_ASSET ELSE ASSET END
+  					FROM info_asset
+    			   WHERE ASSET = #{ASSET})
+<!-- SELECT WK_DT
+     , ASSET
+     , BEF_AMT
+     , INC_AMT
+     , DEC_AMT
+     , AMT
+     , BEF_DT
+  FROM MAST_ASSET
+ WHERE ASSET = #{ASSET}
+   <if test='DT_COND=="BEF"'>
+   AND WK_DT = (
+				SELECT MAX(WK_DT)
+		  		  FROM MAST_ASSET
+		 		 WHERE ASSET = #{ASSET}
+		   		   AND WK_DT <![CDATA[<=]]> #{WK_DT}
+   				)
+   </if>
+   <if test='DT_COND=="AFT"'>
+   AND WK_DT = (
+				SELECT MIN(WK_DT)
+		  		  FROM MAST_ASSET
+		 		 WHERE ASSET = #{ASSET}
+		   		   AND WK_DT <![CDATA[>]]> #{WK_DT}
+   				)
+   </if> -->
+</select> 
+<insert id="isrt" parameterType="InsEvntAssetVo">
+<selectKey keyProperty="EVNT_NO" resultType="string" order="BEFORE">
+SELECT CONCAT('EA', SUBSTR(#{WK_DT},3,6), LPAD(NVL(MAX(SUBSTR(EVNT_NO, 9,2)),0)+1,2,'0'))
+  FROM EVNT_ASSET
+ WHERE 1=1
+   AND WK_DT = #{WK_DT}
+</selectKey>
+INSERT INTO EVNT_ASSET
+		(
+			WK_DT
+		  , EVNT_NO
+		  , EVNT
+		  , PAY_ASSET
+		  , RCV_ASSET
+		  , AMT
+		  , EVNT_TYCD
+		  , FIRM
+		  , DTL
+		)
+VALUES
+		(
+			#{WK_DT}
+		  , #{EVNT_NO}
+		  , #{EVNT}
+		  , #{PAY_ASSET}
+		  , #{RCV_ASSET}
+		  , #{AMT}
+		  , #{EVNT_TYCD}
+		  , #{FIRM}
+		  , #{DTL}
+		
+		)
+</insert> 
+<select id="lstMastAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT DATE_FORMAT(WK_DT, '%Y%m%d')
+     , ASSET
+     , BEF_AMT
+     , INC_AMT
+     , DEC_AMT
+     , AMT
+     , DATE_FORMAT(BEF_DT, '%Y%m%d')
+  FROM MAST_ASSET
+ WHERE 1 = 1
+   AND ASSET = #{ASSET}
+   AND WK_DT = (SELECT MAX(WK_DT) FROM MAST_ASSET WHERE ASSET = #{ASSET})
+</select>
+<insert id="isrtMastAsset" parameterType="InsEvntAssetVo">
+INSERT INTO MAST_ASSET
+		(
+			WK_DT
+		  , ASSET
+		  , BEF_AMT
+		  , INC_AMT
+		  , DEC_AMT
+		  , AMT
+		  , BEF_DT
+		)
+VALUES
+		(
+			#{WK_DT}
+		  , #{ASSET}
+		  , #{BEF_AMT}
+		  , #{INC_AMT}
+		  , #{DEC_AMT}
+		  , #{AMT}
+		  , #{BEF_DT}		
+		)
+</insert>
+<update id="updtMastAsset" parameterType="InsEvntAssetVo">
+UPDATE MAST_ASSET
+   SET INC_AMT = #{INC_AMT}
+     , DEC_AMT = #{DEC_AMT}
+     , AMT = #{AMT}
+ WHERE WK_DT = #{WK_DT}
+   AND ASSET = #{ASSET}
+</update>
+<update id="updtMastAssetAft" parameterType="InsEvntAssetVo">
+UPDATE MAST_ASSET
+   SET BEF_DT = #{BEF_DT}
+ WHERE WK_DT = #{WK_DT}
+   AND ASSET = #{ASSET}
+</update>
+<update id="updtDecAssetAft" parameterType="InsEvntAssetVo">
+UPDATE MAST_ASSET
+   SET BEF_AMT 	= BEF_AMT 	- #{AMT}
+     , AMT 		= AMT 		- #{AMT}
+ WHERE WK_DT <![CDATA[>]]> #{WK_DT}
+   AND ASSET = #{ASSET}
+</update>
+<update id="updtIncAssetAft" parameterType="InsEvntAssetVo">
+UPDATE MAST_ASSET
+   SET BEF_AMT 	= BEF_AMT 	+ #{AMT}
+     , AMT 		= AMT 		+ #{AMT}
+ WHERE WK_DT <![CDATA[>]]> #{WK_DT}
+   AND ASSET = #{ASSET}
+</update>
+</mapper>

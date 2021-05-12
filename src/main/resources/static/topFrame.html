@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>할일</title>
+<style type="text/css">
+	#topMenu {
+            height: 30px;
+            width: 850px;
+    }
+	#topMenu ul li {                   
+	        list-style: none;
+	        color: white;
+	        background-color: #2d2d2d;
+	        float: left;
+	        line-height: 30px;
+	        vertical-align: middle;
+	        text-align: center;
+	}
+    #topMenu .menuLink {
+           text-decoration:none;
+           color: white;
+           display: block;
+           width: 150px;
+           font-size: 12px;
+           font-weight: bold;
+           font-family: "Trebuchet MS", Dotum, Arial;
+   }
+   #topMenu .menuLink:hover {
+           color: red;
+           background-color: #4d4d4d;
+   }
+</style>
+<script>
+function callViw(psView)
+{
+	parent.mainFrame.src = psView;
+};
+</script>
+</head>
+<body>
+<nav id="topMenu">
+	<ul>
+		<li><a class="menuLink" onclick="callViw('home')">홈</a></li>
+		<li><a class="menuLink" onclick="callViw('assetAmtSel/init')">자산내역</a></li>
+		<li><a class="menuLink" onclick="callViw('evntAssetSel/init')">이벤트내역</a></li>
+		<li><a class="menuLink" onclick="callViw('payRcvSum/ini')">수입/지출 합계</a></li>
+		<li><a class="menuLink" onclick="callViw('insEvntAsset/init')">이벤트입력</a></li>
+	</ul>
+</nav>
+</body>
+</html>

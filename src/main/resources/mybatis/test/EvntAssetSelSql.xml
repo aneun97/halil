@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.EvntAssetSelDao"> 
+<select id="list" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
+SELECT A.WK_DT
+     , B.KR_NM EVNT_NM
+     , A.AMT
+     , C.KR_NM EVNT_TYCD 
+  FROM EVNT_ASSET				A
+  LEFT JOIN INFO_EVNT			B
+    ON A.EVNT = B.EVNT
+  LEFT JOIN INFO_EVNT_HCLS	C
+    ON A.EVNT_TYCD = C.EVNT_HCLS
+ WHERE 1 = 1
+   AND A.WK_DT BETWEEN #{FROM_DT} AND #{TO_DT}
+</select> 
+</mapper>
