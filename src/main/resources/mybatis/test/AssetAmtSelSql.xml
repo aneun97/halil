@@ -21,8 +21,8 @@ SELECT DEBIT
 						     , A.ASSET
 						     , B.KR_NM
 						     , A.AMT
-						  FROM MAST_ASSET A
-						     , INFO_ASSET B
+						  FROM mast_asset A
+						     , info_asset B
 						     , info_asset_kind C
 						 WHERE 1 = 1
 						   AND A.ASSET = B.ASSET
@@ -43,8 +43,8 @@ SELECT DEBIT
 						     , A.ASSET
 						     , B.KR_NM
 						     , A.AMT
-						  FROM MAST_ASSET A
-						     , INFO_ASSET B
+						  FROM mast_asset A
+						     , info_asset B
 						     , info_asset_kind C
 						 WHERE 1 = 1
 						   AND A.ASSET = B.ASSET
@@ -74,9 +74,9 @@ SELECT DEBIT
 					 , B.ASSET_KIND		ASSET_KIND
 					 , C.KR_NM			ASSET_KIND_NM
 					 , B.FIRM			FIRM
-				  FROM MAST_ASSET A
-					 , INFO_ASSET B
-					 , INFO_ASSET_KIND C
+				  FROM mast_asset A
+					 , info_asset B
+					 , info_asset_kind C
 				 WHERE 1 = 1
 				   AND A.ASSET = B.ASSET
 				   AND B.ASSET_KIND = C.ASSET_KIND

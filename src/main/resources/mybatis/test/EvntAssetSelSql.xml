@@ -7,10 +7,10 @@ SELECT A.WK_DT
      , B.KR_NM EVNT_NM
      , A.AMT
      , C.KR_NM EVNT_TYCD 
-  FROM EVNT_ASSET				A
-  LEFT JOIN INFO_EVNT			B
+  FROM evnt_asset				A
+  LEFT JOIN info_evnt			B
     ON A.EVNT = B.EVNT
-  LEFT JOIN INFO_EVNT_HCLS	C
+  LEFT JOIN info_evnt_hcls	C
     ON A.EVNT_TYCD = C.EVNT_HCLS
  WHERE 1 = 1
    AND A.WK_DT BETWEEN #{FROM_DT} AND #{TO_DT}
