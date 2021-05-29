@@ -10,5 +10,5 @@ import com.example.demo.test.vo.TestVo;
 @Repository
 @Mapper
 public interface TestDao {
-	List<TestVo> selectTest();
+	List<TestVo> lstMonthAsset(TestVo testVo);
 }

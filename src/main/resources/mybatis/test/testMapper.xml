@@ -2,8 +2,31 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.test.dao.TestDao"> 
-	<select id="selectTest" resultType="TestVo">
-	 SELECT KR_NM AS NAME 
-	   FROM INFO_ASSET
-	</select> 
+<select id="lstMonthAsset" resultType="TestVo">
+<foreach collection="DATE_LIST" item="STD_DT" separator=" UNION ">
+SELECT STD_DT
+     , SUM(AMT) DEBIT
+  FROM (
+	   SELECT #{STD_DT} STD_DT
+			, D.AMT
+		 FROM (
+			  SELECT A.ASSET
+			       , A.AMT
+			    FROM mast_asset 		A
+				   , info_asset 		B
+				   , info_asset_kind 	C
+			   WHERE 1 = 1
+				 AND A.ASSET = B.ASSET
+				 AND B.ASSET_KIND = C.ASSET_KIND
+				 AND C.DC_TYCD = 'D'
+				 AND C.CASH_LVL <![CDATA[<=]]> 1
+				 AND #{STD_DT} BETWEEN B.FROM_DT AND B.TO_DT
+				 AND A.WK_DT <![CDATA[<=]]> #{STD_DT}
+			   ORDER BY A.WK_DT DESC
+			   LIMIT 18446744073709551615
+			  ) D
+	    GROUP BY D.ASSET		 
+	   ) E
+</foreach>	
+</select> 
 </mapper>

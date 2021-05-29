@@ -56,6 +56,14 @@
 		</dependency>
 		
 		<!-- jsp 설정 -->
+		
+		<dependency>
+
+			<groupId>org.springframework.boot</groupId>
+
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
