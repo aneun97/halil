@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/home.css}" rel="stylesheet" type="text/css">
+    <title>홈페이지</title>
+</head>
+<body>
+    <div class="calendar">
+        <div class="header">
+            <div class="year-month" id="staMonthTitle"></div>
+            <div class="nav">
+                <button class="nav-btn go-prev">&lt;</button>
+                <button class="nav-btn go-today">Today</button>
+                <button class="nav-btn go-next">&gt;</button>
+            </div>
+        </div>
+        <div class="main">
+            <div class="days">
+                <div class="day">일</div>
+                <div class="day">월</div>
+                <div class="day">화</div>
+                <div class="day">수</div>
+                <div class="day">목</div>
+                <div class="day">금</div>
+                <div class="day">토</div>
+            </div>
+            <div class="dates"></div>
+        </div>
+    </div>
+</body>
+<script th:src="@{/js/home.js}" charset="UTF-8"></script>
+</html>
