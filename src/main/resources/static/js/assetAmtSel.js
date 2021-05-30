@@ -54,9 +54,8 @@ const dates = resParse;
 
 		dates.forEach(function(e, i) { 
 			
-	  dates[i] = `<div class="item" style="border: 2px solid #eee">
+		dates[i] = `<div class="item" style="border: 2px solid #eee">
 					<div class="cell">${e.asset_KIND_NM}</div>
-					<div class="cell">${e.asset}</div>
 					<div class="cell">${e.asset_NM}</div>
 					<div class="cell">${e.firm}</div>
 					<div class="cell" style="text-align: right;">${fnSetComma(e.amt)} 원</div>

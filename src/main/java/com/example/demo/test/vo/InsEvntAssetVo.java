@@ -54,6 +54,9 @@ public class InsEvntAssetVo {
 	//INFO_EVNT 테이블
 	private String PAY_TYCD;
 	private String RCV_TYCD;
+
+	//INFO_EVNT_HCLS 테이블
+	private String EVNT_HCLS;
 	
 	public String getWK_DT() {
 		return WK_DT;
@@ -291,6 +294,12 @@ public class InsEvntAssetVo {
 	}
 	public void setTOT_DAY(String tOT_DAY) {
 		TOT_DAY = tOT_DAY;
+	}
+	public String getEVNT_HCLS() {
+		return EVNT_HCLS;
+	}
+	public void setEVNT_HCLS(String eVNT_HCLS) {
+		EVNT_HCLS = eVNT_HCLS;
 	}
 	
 	

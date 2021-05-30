@@ -15,6 +15,12 @@ SELECT ASSET
      , ASSET_KIND
   FROM info_asset
 </select> 
+<select id="lstEvntTycd" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+SELECT EVNT
+     , EVNT_HCLS
+     , KR_NM
+  FROM info_evnt_hcls
+</select> 
 <select id="viewEvnt" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
 SELECT EVNT
      , KR_NM

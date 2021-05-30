@@ -2,6 +2,8 @@ package com.example.demo.test.ctl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,23 +22,29 @@ public class InsEvntAssetCtl {
 	@RequestMapping("/init")
 	public ModelAndView init() throws Exception{
 		ModelAndView mav = new ModelAndView("insEvntAsset");
-				
-		List<InsEvntAssetVo> evntLs = insEvntAssetSvc.lstEvnt();
-		List<InsEvntAssetVo> assetLs = insEvntAssetSvc.lstAsset();
-		mav.addObject("EVNT", evntLs);
-		mav.addObject("ASSET", assetLs);
 		return mav;
 	}
 	
-	@RequestMapping("/isrt")
-	public ModelAndView isrt(InsEvntAssetVo insEvntAssetVo) throws Exception{
-		insEvntAssetSvc.isrt(insEvntAssetVo);
-		ModelAndView mav = new ModelAndView("insEvntAsset");
-		
+	@RequestMapping("/lstEvnt")
+	public List<InsEvntAssetVo> lstEvnt(HttpServletRequest req) {
 		List<InsEvntAssetVo> evntLs = insEvntAssetSvc.lstEvnt();
-		List<InsEvntAssetVo> assetLs = insEvntAssetSvc.lstAsset();
-		mav.addObject("EVNT", evntLs);
-		mav.addObject("ASSET", assetLs);
-		return mav;
+		return evntLs;
 	}
+	@RequestMapping("/lstAsset")
+	public List<InsEvntAssetVo> lstAsset(HttpServletRequest req) {
+		List<InsEvntAssetVo> assetLs = insEvntAssetSvc.lstAsset();
+		return assetLs;
+	}
+	@RequestMapping("/lstEvntTycd")
+	public List<InsEvntAssetVo> lstEvntTycd(HttpServletRequest req) {
+		List<InsEvntAssetVo> evntHclsLs = insEvntAssetSvc.lstEvntTycd();
+		return evntHclsLs;
+	}
+
+	@RequestMapping("/isrt")
+	public void isrt(InsEvntAssetVo insEvntAssetVo) {
+		//insEvntAssetSvc.isrt(insEvntAssetVo);
+	}
+	
+
 }

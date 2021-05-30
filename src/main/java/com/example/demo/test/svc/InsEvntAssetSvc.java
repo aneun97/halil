@@ -28,6 +28,9 @@ public class InsEvntAssetSvc {
 	public List<InsEvntAssetVo> lstAsset(){
 		return insEvntAssetDao.lstAsset();
 	}
+	public List<InsEvntAssetVo> lstEvntTycd(){
+		return insEvntAssetDao.lstEvntTycd();
+	}
 
 	public List<InsEvntAssetVo> lstMastAsset(InsEvntAssetVo insEvntAssetVo){
 		return insEvntAssetDao.lstMastAsset(insEvntAssetVo);

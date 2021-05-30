@@ -31,12 +31,6 @@ public class AssetAmtSelCtl {
 		AssetAmtSelVo assetAmtSelVo = new AssetAmtSelVo();
 		assetAmtSelVo.setWK_DT(req.getParameter("WK_DT"));
 		List<AssetAmtSelVo> chkList = assetAmtSelSvc.viwTotal(assetAmtSelVo);
-//		for(TestVo chkVo:chkList) {
-//			System.out.println("=======================================");
-//			System.out.println("날짜::"+chkVo.getSTD_DT());
-//			System.out.println("금액::"+chkVo.getDEBIT());
-//			System.out.println("=======================================");
-//		}
 		return chkList;
 	}
 }

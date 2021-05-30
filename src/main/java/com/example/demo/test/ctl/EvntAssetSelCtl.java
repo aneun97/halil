@@ -22,14 +22,10 @@ public class EvntAssetSelCtl {
 		ModelAndView mav = new ModelAndView("evntAssetSel");
 		return mav;
 	}
-	
-	@RequestMapping(value = "/list")
-	public ModelAndView list(EvntAssetSelVo evntAssetSelVo) {
-		ModelAndView mav = new ModelAndView("evntAssetSel");
+
+	@RequestMapping("/list")
+	public List<EvntAssetSelVo> list(EvntAssetSelVo evntAssetSelVo) {
 		List<EvntAssetSelVo> evntAssetSelLs = evntAssetSelSvc.list(evntAssetSelVo);
-		mav.addObject("LIST", evntAssetSelLs);
-		mav.addObject("FROM_DT", evntAssetSelVo.getFROM_DT());
-		mav.addObject("TO_DT", evntAssetSelVo.getTO_DT());
-		return mav;
+		return evntAssetSelLs;
 	}
 }

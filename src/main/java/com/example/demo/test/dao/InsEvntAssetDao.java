@@ -12,6 +12,7 @@ import com.example.demo.test.vo.InsEvntAssetVo;
 public interface InsEvntAssetDao {
 	List<InsEvntAssetVo> lstEvnt();
 	List<InsEvntAssetVo> lstAsset();
+	List<InsEvntAssetVo> lstEvntTycd();
 	List<InsEvntAssetVo> lstMastAsset(InsEvntAssetVo insEvntAssetVo);
 	InsEvntAssetVo viewEvnt(InsEvntAssetVo insEvntAssetVo);
 	InsEvntAssetVo viewMastAsset(InsEvntAssetVo insEvntAssetVo);
