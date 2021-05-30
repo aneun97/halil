@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/evntAssetSel.css}" rel="stylesheet" type="text/css">
+	<title>자산조회</title>
+</head>
+<body>
+	<form method="post" action="list">
+		<p>
+			<label>조회기간</label>
+			<input type="text" name="FROM_DT" id="FROM_DT" value=${FROM_DT}>
+			<input type="text" name="TO_DT" id="TO_DT" value=${TO_DT}>
+	<button type="button" onclick="test()">조회</button>
+		</p>
+	</form>
+	<div class="container1">
+		<div class="item" style="border: 2px dashed maroon">
+			<div class="cell">발생일</div>
+			<div class="cell">이벤트</div>
+			<div class="cell">분류</div>
+			<div class="cell">금액</div>
+		</div>
+	</div>
+	<div class="container2">
+	</div>
+</body>
+<script th:src="@{/js/evntAssetSel.js}" charset="UTF-8"></script>
+</html>

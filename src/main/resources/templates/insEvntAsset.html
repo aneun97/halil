@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/insEvntAsset.css}" rel="stylesheet" type="text/css">
+	<title>자산조회</title>
+</head>
+<body>
+	<form method="post" action="isrt">
+		<p><label>발생일 <input type="text" name="WK_DT" id="WK_DT"></label></p>
+		<p>
+			<label>이벤트 
+			<select name="EVNT" id="EVNT" onchange="evnt_onchange()">
+			<option value=''>-</option>
+			</select>
+			</label>
+		</p>
+		<p>
+			<label id="labPAY_ASSET">출금처 
+			<select name="PAY_ASSET" id="PAY_ASSET" class="PAY_ASSET">
+			<option value=''>-</option>
+			</select>
+			</label>
+		</p>
+		<p>
+			<label id="labRCV_ASSET">입금처 
+			<select name="RCV_ASSET" id="RCV_ASSET" class="RCV_ASSET">
+			<option value=''>-</option>
+			</select>
+			</label>
+		</p>
+		<p><label>액수 <input type="text" id="AMT"></label></p>
+		<p>
+			<label>이벤트타입 
+			<select name="EVNT_TYCD" id="EVNT_TYCD">
+			<option value=''>-</option>
+			</select>
+			</label>
+		</p>
+		<p><label>거래처 <input type="text" id="FIRM"></label></p>
+		<p><label>설명 <input type="text" id="DTL"></label></p>
+
+	</form>
+	<button type="button" onclick="test()">저장</button>
+</body>
+<script th:src="@{/js/insEvntAsset.js}" charset="UTF-8"></script>
+</html>
