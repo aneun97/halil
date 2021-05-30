@@ -43,7 +43,7 @@ public class InsEvntAssetCtl {
 
 	@RequestMapping("/isrt")
 	public void isrt(InsEvntAssetVo insEvntAssetVo) {
-		//insEvntAssetSvc.isrt(insEvntAssetVo);
+		insEvntAssetSvc.isrt(insEvntAssetVo);
 	}
 	
 
