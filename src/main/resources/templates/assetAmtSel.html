@@ -6,44 +6,40 @@
 	<title>자산조회</title>
 </head>
 <body>
-	<button type="button" onclick="test()">클릭해 보세요!</button>
-	<form method="post" action="list">
 		<p>
 		<label>기준일 		</label>
-		<input type="text" name="WK_DT" id="WK_DT" value=${assetAmtSelVo.WK_DT}>
-		<input type="submit" value="조회">
+	<input type="text" name="WK_DT" id="WK_DT" value=${assetAmtSelVo.WK_DT}>
+	<button type="button" onclick="test()">조회</button>
 		</p>
-	</form>
 	
 	<div id="total">
 	<h1 style="color: blue">
 		<span>자산:  </span>
-		<span id="debit">${LIST[0].DEBIT}</span>
-		<script type="text/javascript">fnSetComma("debit")</script>
+		<span id="debit"></span>
 		<span>원</span>
 	</h1>
 	<h1 style="color: red">
 		<span>부채:  </span>
-		<span id="credit">${LIST[0].CREDIT}</span>
-		<script type="text/javascript">fnSetComma("credit")</script>
+		<span id="credit"></span>
 		<span>원</span>
 	</h1>
 	<h1 style="color: black">
 		<span>순자산:  </span>
-		<span id="netDebit">${LIST[0].NET_DEBIT}</span>
-		<script type="text/javascript">fnSetComma("netDebit")</script>
+		<span id="netDebit"></span>
 		<span>원</span>
 	</h1>
 	</div>
 
-	<div class="container">
+	<div class="container1">
 		<div class="item" style="border: 2px dashed maroon">
 			<div class="cell">자산유형</div>
 			<div class="cell">자산명</div>
 			<div class="cell">금액</div>
 			<div class="cell">발행사</div>
 		</div>
-		<c:forEach var="ROW" items="${LIST}" varStatus="idx">
+	</div>
+	<div class="container2">
+<!-- 		<c:forEach var="ROW" items="${LIST}" varStatus="idx">
 		<div class="item" style="border: 2px solid #eee">
 			<div class="cell">${ROW.ASSET_KIND_NM}</div>
 			<div class="cell">${ROW.ASSET_NM}</div>
@@ -51,7 +47,7 @@
 			<div class="cell" id="amt${idx.index}" style="text-align: right;">${ROW.AMT} 원</div>
 			<script type="text/javascript">fnSetComma("amt${idx.index}")</script>
 		</div>
-		</c:forEach>
+		</c:forEach> -->
 	</div>
 </body>
 <script th:src="@{/js/assetAmtSel.js}" charset="UTF-8"></script>

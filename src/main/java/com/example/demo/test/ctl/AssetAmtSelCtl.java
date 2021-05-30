@@ -2,6 +2,8 @@ package com.example.demo.test.ctl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +25,18 @@ public class AssetAmtSelCtl {
 		
 		return mav;
 	}
-	
+
 	@RequestMapping("/list")
-	public ModelAndView list(AssetAmtSelVo assetAmtSelVo) throws Exception{
-		ModelAndView mav = new ModelAndView("assetAmtSel");
-		List<AssetAmtSelVo> assetAmtSelLs = assetAmtSelSvc.viwTotal(assetAmtSelVo);
-		mav.addObject("LIST", assetAmtSelLs);
-		return mav;
+	public List<AssetAmtSelVo> list(HttpServletRequest req) {
+		AssetAmtSelVo assetAmtSelVo = new AssetAmtSelVo();
+		assetAmtSelVo.setWK_DT(req.getParameter("WK_DT"));
+		List<AssetAmtSelVo> chkList = assetAmtSelSvc.viwTotal(assetAmtSelVo);
+//		for(TestVo chkVo:chkList) {
+//			System.out.println("=======================================");
+//			System.out.println("날짜::"+chkVo.getSTD_DT());
+//			System.out.println("금액::"+chkVo.getDEBIT());
+//			System.out.println("=======================================");
+//		}
+		return chkList;
 	}
 }
