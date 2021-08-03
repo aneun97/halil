@@ -33,4 +33,9 @@ public class AssetAmtSelCtl {
 		List<AssetAmtSelVo> chkList = assetAmtSelSvc.viwTotal(assetAmtSelVo);
 		return chkList;
 	}
+
+	@RequestMapping("/ins")
+	public void isrt(AssetAmtSelVo assetAmtSelVo) {
+		assetAmtSelSvc.ins(assetAmtSelVo);
+	}
 }

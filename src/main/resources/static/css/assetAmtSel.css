@@ -11,3 +11,20 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 }
+
+.backDiv {
+	opacity: 0.2;
+	pointer-events: none;
+}
+
+.wrapper {
+	position: absolute;
+	top:20%;
+	left:40%;
+}
+.content {
+	background-color: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  border-style: double; border-width: 2px;
+}

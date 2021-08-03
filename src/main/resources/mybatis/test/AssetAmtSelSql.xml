@@ -13,7 +13,7 @@ SELECT DEBIT
 	 , ASSET_LIST.AMT
 	 , ASSET_LIST.ASSET_KIND
 	 , ASSET_LIST.ASSET_KIND_NM
-	 , ASSET_LIST.FIRM
+	 , NVL(ASSET_LIST.FIRM, '-') FIRM
   FROM (SELECT SUM(AMT) DEBIT
 		  FROM (SELECT C.KR_NM
 				     , C.AMT
@@ -67,6 +67,7 @@ SELECT DEBIT
 			 , D.ASSET_KIND
 			 , D.ASSET_KIND_NM
 			 , D.FIRM
+			 , D.SORT_NO
 		  FROM (SELECT A.WK_DT			WK_DT
 					 , A.ASSET			ASSET
 				     , B.KR_NM			ASSET_NM
@@ -74,6 +75,7 @@ SELECT DEBIT
 					 , B.ASSET_KIND		ASSET_KIND
 					 , C.KR_NM			ASSET_KIND_NM
 					 , B.FIRM			FIRM
+					 , B.SORT_NO		SORT_NO
 				  FROM mast_asset A
 					 , info_asset B
 					 , info_asset_kind C
@@ -87,5 +89,51 @@ SELECT DEBIT
 				) D	 
 		 GROUP BY D.ASSET						 
 		) ASSET_LIST
+ ORDER BY SORT_NO
 </select> 
+<insert id="ins" parameterType="AssetAmtSelVo">
+<selectKey keyProperty="ASSET,SORT_NO" resultType="AssetAmtSelVo" order="BEFORE">
+SELECT CONCAT('A', LPAD(NVL(MAX(SUBSTR(ASSET,2,5)),0)+1,5,'0')) ASSET
+     , NVL(MAX(SORT_NO),0)+1 SORT_NO
+  FROM info_asset
+</selectKey>
+INSERT INTO info_asset
+		(
+			ASSET
+		  , SORT_NO
+		  , KR_NM
+		  , EN_NM
+		  , ASSET_KIND
+		  , OWNER
+		  , FIRM
+		  , FROM_DT
+		  , TO_DT
+		  , CHRG_YN
+		  , CHRG_COND_AMT
+		  , CHRG_ASSET
+		  , CHRG_AMT
+		  , PAY_ASSET
+		  , PAY_DAY
+		  , TOT_DAY
+		)
+VALUES
+		(
+			#{ASSET}
+		  , #{SORT_NO}
+		  , #{KR_NM}
+		  , #{EN_NM}
+		  , #{ASSET_KIND}
+		  , #{OWNER}
+		  , #{FIRM}
+		  , #{FROM_DT}
+		  , #{TO_DT}
+		  , #{CHRG_YN}
+		  , #{CHRG_COND_AMT}
+		  , #{CHRG_ASSET}
+		  , #{CHRG_AMT}
+		  , #{PAY_ASSET}
+		  , #{PAY_DAY}
+		  , #{TOT_DAY}		
+		)
+</insert> 
 </mapper>

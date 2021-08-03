@@ -4,5 +4,9 @@
 }
 .item {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+#total {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 }

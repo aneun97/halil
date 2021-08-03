@@ -6,6 +6,9 @@
 	<title>자산조회</title>
 </head>
 <body>
+	<input type="text" id="EVNT_NO" style="display: none" th:value="${EVNT_NO}">
+	<button type="button" onclick="btnUpd_onClick()">수정</button>
+	<button type="button" onclick="btnDel_onClick()">삭제</button>
 	<form method="post" action="isrt">
 		<p><label>발생일 <input type="text" name="WK_DT" id="WK_DT"></label></p>
 		<p>

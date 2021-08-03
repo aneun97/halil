@@ -11,4 +11,5 @@ import com.example.demo.test.vo.AssetAmtSelVo;
 @Mapper
 public interface AssetAmtSelDao {
 	List<AssetAmtSelVo> viwTotal(AssetAmtSelVo assetAmtSelVo);
+	void ins(AssetAmtSelVo AssetAmtSelVo);
 }

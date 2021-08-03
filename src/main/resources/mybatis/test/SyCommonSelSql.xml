@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.SyCommonSelDao"> 
+<select id="lstEvnt" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+SELECT EVNT
+     , KR_NM
+     , RCV_TYCD
+     , PAY_TYCD
+  FROM info_evnt
+</select> 
+<select id="lstAsset" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+SELECT ASSET
+     , KR_NM
+     , ASSET_KIND
+  FROM info_asset
+ WHERE 1=1
+   <if test="WK_DT !=null and WK_DT !=''">
+   AND #{WK_DT} BETWEEN FROM_DT AND TO_DT
+   </if>
+   <if test="FROM_DT !=null and FROM_DT !='' and TO_DT !=null and TO_DT !=''">
+   AND (#{FROM_DT} BETWEEN FROM_DT AND TO_DT
+       OR #{TO_DT} BETWEEN FROM_DT AND TO_DT)
+   </if>
+ ORDER BY SORT_NO
+</select> 
+<select id="lstAssetKind" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+SELECT ASSET_KIND
+     , KR_NM
+     , PAY_YN
+  FROM info_asset_kind
+</select> 
+<select id="lstEvntTycd" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+SELECT EVNT
+     , EVNT_HCLS
+     , KR_NM
+  FROM info_evnt_hcls
+</select> 
+</mapper>

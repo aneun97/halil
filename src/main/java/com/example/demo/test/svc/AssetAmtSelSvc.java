@@ -17,4 +17,11 @@ public class AssetAmtSelSvc {
 	public List<AssetAmtSelVo> viwTotal(AssetAmtSelVo assetAmtSelVo){
 		return assetAmtSelDao.viwTotal(assetAmtSelVo);
 	}
+
+	/**
+	 *  자산 신규 입력
+	**/
+	public void ins(AssetAmtSelVo assetAmtSelVo){
+		assetAmtSelDao.ins(assetAmtSelVo);	
+	}
 }

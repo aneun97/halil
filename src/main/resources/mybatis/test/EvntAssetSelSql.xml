@@ -3,16 +3,56 @@
 
 <mapper namespace="com.example.demo.test.dao.EvntAssetSelDao"> 
 <select id="list" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
-SELECT A.WK_DT
+SELECT A.EVNT_NO
+	 , A.WK_DT
      , B.KR_NM EVNT_NM
      , A.AMT
-     , C.KR_NM EVNT_TYCD 
+     , NVL(C.KR_NM, '-') EVNT_TYCD
+     , NVL(D.KR_NM, '-') PAY_ASSET
+     , NVL(E.KR_NM, '-') RCV_ASSET
   FROM evnt_asset				A
   LEFT JOIN info_evnt			B
     ON A.EVNT = B.EVNT
-  LEFT JOIN info_evnt_hcls	C
+  LEFT JOIN info_evnt_hcls		C
     ON A.EVNT_TYCD = C.EVNT_HCLS
+  LEFT JOIN info_asset			D
+    ON A.PAY_ASSET = D.ASSET
+  LEFT JOIN info_asset			E
+    ON A.RCV_ASSET = E.ASSET
  WHERE 1 = 1
    AND A.WK_DT BETWEEN #{FROM_DT} AND #{TO_DT}
+   <if test='PAY_YN !="true"'>
+   AND A.EVNT != 'E0001'
+   </if>
+   <if test='RCV_YN !="true"'>
+   AND A.EVNT != 'E0002'
+   </if>
+   <if test='ETC_YN !="true"'>
+   AND A.EVNT NOT IN (
+   					SELECT EVNT
+   					  FROM info_evnt
+   					 WHERE EVNT NOT IN ('E0001', 'E0002')
+   				)
+   </if>
+   <if test="ASSET !=null and ASSET !=''">
+   AND (A.PAY_ASSET = #{ASSET}
+   		OR A.RCV_ASSET = #{ASSET}
+   		)
+   </if>
+   <if test="ASSET_KIND !=null and ASSET_KIND !=''">
+   AND (A.PAY_ASSET IN (SELECT ASSET 
+   						 FROM info_asset
+   						WHERE ASSET_KIND = #{ASSET_KIND}
+   					   )
+   		OR A.RCV_ASSET IN (SELECT ASSET 
+   						 FROM info_asset
+   						WHERE ASSET_KIND = #{ASSET_KIND}
+   					   )
+   		)
+   </if>
+   <if test="EVNT_TYCD !=null and EVNT_TYCD !=''">
+   AND A.EVNT_TYCD = #{EVNT_TYCD}
+   </if>
+ ORDER BY WK_DT DESC
 </select> 
 </mapper>

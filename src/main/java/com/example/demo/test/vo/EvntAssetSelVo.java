@@ -21,9 +21,15 @@ public class EvntAssetSelVo {
 
 
 	private String ASSET;
+	private String ASSET_KIND;
 	private String EVNT_NM;
 	private String FROM_DT;
 	private String TO_DT;
+	
+
+	private String PAY_YN;
+	private String RCV_YN;
+	private String ETC_YN;
 	
 	
 	
@@ -105,7 +111,31 @@ public class EvntAssetSelVo {
 	public void setEVNT_NM(String eVNT_NM) {
 		EVNT_NM = eVNT_NM;
 	}
-	
+	public String getPAY_YN() {
+		return PAY_YN;
+	}
+	public void setPAY_YN(String pAY_YN) {
+		PAY_YN = pAY_YN;
+	}
+	public String getRCV_YN() {
+		return RCV_YN;
+	}
+	public void setRCV_YN(String rCV_YN) {
+		RCV_YN = rCV_YN;
+	}
+	public String getETC_YN() {
+		return ETC_YN;
+	}
+	public void setETC_YN(String eTC_YN) {
+		ETC_YN = eTC_YN;
+	}
+	public String getASSET_KIND() {
+		return ASSET_KIND;
+	}
+	public void setASSET_KIND(String aSSET_KIND) {
+		ASSET_KIND = aSSET_KIND;
+	}
+
 	
 	
 }

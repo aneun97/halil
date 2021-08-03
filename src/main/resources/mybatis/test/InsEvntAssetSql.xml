@@ -14,6 +14,7 @@ SELECT ASSET
      , KR_NM
      , ASSET_KIND
   FROM info_asset
+ ORDER BY SORT_NO
 </select> 
 <select id="lstEvntTycd" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
 SELECT EVNT

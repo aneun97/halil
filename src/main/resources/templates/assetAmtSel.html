@@ -6,11 +6,13 @@
 	<title>자산조회</title>
 </head>
 <body>
-		<p>
-		<label>기준일 		</label>
+<div id="divMan">
+	<p>
+	<label>기준일 		</label>
 	<input type="text" name="WK_DT" id="WK_DT" value=${assetAmtSelVo.WK_DT}>
-	<button type="button" onclick="test()">조회</button>
-		</p>
+	<button type="button" id="btnSer" onclick="onClick_btnSer()">조회</button>
+	<button type="button" id="btnIns" onclick="onClick_btnIns()">입력</button>
+	</p>
 	
 	<div id="total">
 	<h1 style="color: blue">
@@ -34,8 +36,8 @@
 		<div class="item" style="border: 2px dashed maroon">
 			<div class="cell">자산유형</div>
 			<div class="cell">자산명</div>
-			<div class="cell">금액</div>
 			<div class="cell">발행사</div>
+			<div class="cell">금액</div>
 		</div>
 	</div>
 	<div class="container2">
@@ -49,6 +51,50 @@
 		</div>
 		</c:forEach> -->
 	</div>
+</div>
+<div id="divDtl" style="display: none;" class="wrapper">
+  <div class="content">
+  
+	<button type="button" onclick="onClick_btnUpd()">수정</button>
+	<button type="button" onclick="onClick_btnDel()">삭제</button>
+	<button type="button" onclick="onClick_btnSav()">저장</button>
+	<button type="button" onclick="onClick_btnCls()">닫기</button>
+	<p><label>자산명 <input type="text" id="txtAssetNm"></label></p>
+	<p>
+		<label>자산유형 
+		<select id="selAssetKind" onchange="onchange_selAssetKind()">
+		<option value=''>-</option>
+		</select>
+		</label>
+	</p>
+	<p><label>발행기관 <input type="text" id="txtFirm"></label></p>
+	<p><label>시작일 <input type="text" id="txtFromDt"></label></p>
+	<p><label>만기일 <input type="text" id="txtToDt"></label></p>
+	<p>
+		<label>자동충전여부</label>
+		<label><input type="radio" name="rdoChrgYn" value="true">여</label>
+		<label><input type="radio" name="rdoChrgYn" value="false">부</label>
+	</p>
+	<p><label>자동충전조건금액 <input type="text" id="txtChrgCondAmt"></label></p>
+	<p>
+		<label>자동충전처 
+		<select id="selChrgAsset">
+		<option value=''>-</option>
+		</select>
+		</label>
+	</p>
+	<p><label>자동충전조건금액 <input type="text" id="txtChrgAmt"></label></p>
+	<p>
+		<label>결제처 
+		<select id="selPayAsset">
+		<option value=''>-</option>
+		</select>
+		</label>
+	</p>
+	<p><label>결제일 <input type="text" id="txtPayDay"></label></p>
+	<p><label>집계일 <input type="text" id="txtTotDay"></label></p>
+  </div>
+</div>
 </body>
 <script th:src="@{/js/assetAmtSel.js}" charset="UTF-8"></script>
 </html>

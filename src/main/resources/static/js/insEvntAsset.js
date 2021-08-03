@@ -1,17 +1,32 @@
+/*---------------------------
+- 자산 입출금 상세 팝업
+---------------------------*/
 
 var resParse1;
 var resParse2;
 var resParse3;
+var resParse4;
 
+var evntNo = document.getElementById("EVNT_NO").value;
 
 insEvntAsset_init();
 
 
+/*
+ * 화면 오픈 함수
+ */
 function insEvntAsset_init(){
-	fnSetToday();
-	fnSetCond1();
-	fnSetCond2();
-	fnSetCond3();
+	
+	if(evntNo == null || evntNo == undefined || evntNo == "")
+	{		
+		fnSetToday();
+		fnSetCond1();
+		fnSetCond2();
+		fnSetCond3();
+	}
+	else{
+		fnSetCond4();
+	}
 }
 
 
@@ -34,7 +49,7 @@ function fnSetCond1(){
 	var xhr = new XMLHttpRequest();
 	
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
-	xhr.open("POST", "lstEvnt", true);
+	xhr.open("POST", "/syCommonsel/lstEvnt", true);
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -58,7 +73,7 @@ function fnSetCond2(){
 	var xhr = new XMLHttpRequest();
 	
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
-	xhr.open("POST", "lstAsset", true);
+	xhr.open("POST", "/syCommonsel/lstAsset", true);
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -78,15 +93,19 @@ function fnSetCond2(){
 
 function fnSetCond3(){
 	
+	var wkDt = document.getElementById('WK_DT').value;
+	
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
 	var xhr = new XMLHttpRequest();
 	
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
-	xhr.open("POST", "lstEvntTycd", true);
+	xhr.open("POST", "/syCommonsel/lstEvntTycd", true);
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.send();
+	xhr.send(		
+	     "WK_DT	=" +wkDt
+	);
 	
 	xhr.onload = function () {
 	  // xhr 객체의 status 값을 검사한다.
@@ -96,6 +115,30 @@ function fnSetCond3(){
 		
 		resParse3 = JSON.parse(resText);
 		fnSetEvntHcls();
+	  }
+	}
+}
+
+function fnSetCond4(){
+	
+	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
+	var xhr = new XMLHttpRequest();
+	
+	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
+	xhr.open("POST", "viwDtl", true);
+	
+	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.send("EVNT_NO="+evntNo);
+	
+	xhr.onload = function () {
+	  // xhr 객체의 status 값을 검사한다.
+	  if (xhr.status === 200) {
+	    // 서버로 부터 받은 데이터를 처리할 코드
+		var resText = xhr.responseText;
+		
+		resParse4 = JSON.parse(resText);
+		fnSetDtl();
 	  }
 	}
 }
@@ -178,8 +221,9 @@ function evnt_onchange() {
 	var sEvntRcvTycd = sEvnt.options[sEvnt.selectedIndex].getAttribute('rcvTycd');
 	
 	if(sEvntPayTycd == "N") {
-		document.getElementById("PAY_ASSET").style.display = "none";
 		document.getElementById("labPAY_ASSET").style.display = "none";
+		document.getElementById("PAY_ASSET").style.display = "none";
+		document.getElementById("PAY_ASSET").selectedIndex = 0;
 	}
 	else {
 		document.getElementById("PAY_ASSET").style.display = "block";
@@ -187,14 +231,31 @@ function evnt_onchange() {
 	}
 	
 	if(sEvntRcvTycd == "N") {
-		document.getElementById("RCV_ASSET").style.display = "none";
 		document.getElementById("labRCV_ASSET").style.display = "none";
+		document.getElementById("RCV_ASSET").style.display = "none";
+		document.getElementById("RCV_ASSET").selectedIndex = 0;
 	}
 	else {
 		document.getElementById("RCV_ASSET").style.display = "block";
 		document.getElementById("labRCV_ASSET").style.display = "block";
 	}
 }
+
+
+function fnSetDtl(){
+	
+	var targetSel = document.getElementById('EVNT')
+
+	resParse1.forEach(function(e) {
+		var opt = document.createElement('option')
+		opt.setAttribute('value', e.evnt)
+		opt.setAttribute('payTycd', e.pay_TYCD)
+		opt.setAttribute('rcvTycd', e.rcv_TYCD)
+		opt.innerText = e.kr_NM
+		targetSel.appendChild(opt)
+	})
+}
+
 
 function test(){
 	

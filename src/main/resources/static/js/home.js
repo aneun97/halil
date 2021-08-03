@@ -42,8 +42,22 @@ function home_init(){
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
 	xhr.open("POST", "lstCash", true);
 
-	var startDate = viewYear.toString().concat(gfnLpad(viewMonth.toString(),2,"0"),gfnLpad(prevDates[0].toString(),2,"0"));
-	var endDate = viewYear.toString().concat(gfnLpad((viewMonth+2).toString(),2,"0"),gfnLpad(nextDates[nextDates.length-1].toString(),2,"0"));
+	var startDate;	
+	var endDate;
+	
+	if(prevDates.length > 0){
+		startDate = viewYear.toString().concat(gfnLpad(viewMonth.toString(),2,"0"),gfnLpad(prevDates[0].toString(),2,"0"));
+	}
+	else{
+		startDate = viewYear.toString().concat(gfnLpad((viewMonth+1).toString(),2,"0"),gfnLpad(thisDates[0].toString(),2,"0"));
+	}
+	
+	if(nextDates.length > 0){
+		endDate = viewYear.toString().concat(gfnLpad((viewMonth+2).toString(),2,"0"),gfnLpad(nextDates[nextDates.length-1].toString(),2,"0"));
+	}
+	else{
+		endDate = viewYear.toString().concat(gfnLpad((viewMonth+1).toString(),2,"0"),gfnLpad(thisDates[thisDates.length-1].toString(),2,"0"));
+	}
 
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
