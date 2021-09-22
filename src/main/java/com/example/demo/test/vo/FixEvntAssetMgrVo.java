@@ -7,10 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EvntAssetSelVo {
-	//EVNT_ASSET 테이블
-	private String WK_DT;
-	private String EVNT_NO;
+public class FixEvntAssetMgrVo {
+	//FIX_EVNT_ASSET 테이블
+	private String FIX_EVNT_NO;
 	private String EVNT;
 	private String PAY_ASSET;
 	private String RCV_ASSET;
@@ -18,45 +17,33 @@ public class EvntAssetSelVo {
 	private String EVNT_TYCD;
 	private String FIRM;
 	private String DTL;
-	private String CHK_YN;
-
-
-	private String ASSET;
-	private String ASSET_KIND;
-	private String EVNT_NM;
+	private String EVNT_PER;
+	private int EVNT_DT;
 	private String FROM_DT;
 	private String TO_DT;
-	
+	private String AMT_ID_TYCD;
+	private String AMT_ID;
+	private String REC_DT;
 
-	private String PAY_YN;
-	private String RCV_YN;
-	private String ETC_YN;
+	private String EVNT_NM;
+
+	//EVNT_ASSET 테이블
+	private String EVNT_NO;
+	private String WK_DT;
+	private String CHK_YN;
 	
 	
-	
-	public String getWK_DT() {
-		return WK_DT;
+	public String getFIX_EVNT_NO() {
+		return FIX_EVNT_NO;
 	}
-	public void setWK_DT(String wK_DT) {
-		WK_DT = wK_DT;
-	}
-	public String getEVNT_NO() {
-		return EVNT_NO;
-	}
-	public void setEVNT_NO(String eVNT_NO) {
-		EVNT_NO = eVNT_NO;
+	public void setFIX_EVNT_NO(String fIX_EVNT_NO) {
+		FIX_EVNT_NO = fIX_EVNT_NO;
 	}
 	public String getEVNT() {
 		return EVNT;
 	}
 	public void setEVNT(String eVNT) {
 		EVNT = eVNT;
-	}
-	public String getASSET() {
-		return ASSET;
-	}
-	public void setASSET(String aSSET) {
-		ASSET = aSSET;
 	}
 	public String getPAY_ASSET() {
 		return PAY_ASSET;
@@ -94,6 +81,18 @@ public class EvntAssetSelVo {
 	public void setDTL(String dTL) {
 		DTL = dTL;
 	}
+	public String getEVNT_PER() {
+		return EVNT_PER;
+	}
+	public void setEVNT_PER(String eVNT_PER) {
+		EVNT_PER = eVNT_PER;
+	}
+	public int getEVNT_DT() {
+		return EVNT_DT;
+	}
+	public void setEVNT_DT(int eVNT_DT) {
+		EVNT_DT = eVNT_DT;
+	}
 	public String getFROM_DT() {
 		return FROM_DT;
 	}
@@ -106,35 +105,23 @@ public class EvntAssetSelVo {
 	public void setTO_DT(String tO_DT) {
 		TO_DT = tO_DT;
 	}
-	public String getEVNT_NM() {
-		return EVNT_NM;
+	public String getAMT_ID_TYCD() {
+		return AMT_ID_TYCD;
 	}
-	public void setEVNT_NM(String eVNT_NM) {
-		EVNT_NM = eVNT_NM;
+	public void setAMT_ID_TYCD(String aMT_ID_TYCD) {
+		AMT_ID_TYCD = aMT_ID_TYCD;
 	}
-	public String getPAY_YN() {
-		return PAY_YN;
+	public String getAMT_ID() {
+		return AMT_ID;
 	}
-	public void setPAY_YN(String pAY_YN) {
-		PAY_YN = pAY_YN;
+	public void setAMT_ID(String aMT_ID) {
+		AMT_ID = aMT_ID;
 	}
-	public String getRCV_YN() {
-		return RCV_YN;
+	public String getWK_DT() {
+		return WK_DT;
 	}
-	public void setRCV_YN(String rCV_YN) {
-		RCV_YN = rCV_YN;
-	}
-	public String getETC_YN() {
-		return ETC_YN;
-	}
-	public void setETC_YN(String eTC_YN) {
-		ETC_YN = eTC_YN;
-	}
-	public String getASSET_KIND() {
-		return ASSET_KIND;
-	}
-	public void setASSET_KIND(String aSSET_KIND) {
-		ASSET_KIND = aSSET_KIND;
+	public void setWK_DT(String wK_DT) {
+		WK_DT = wK_DT;
 	}
 	public String getCHK_YN() {
 		return CHK_YN;
@@ -142,6 +129,29 @@ public class EvntAssetSelVo {
 	public void setCHK_YN(String cHK_YN) {
 		CHK_YN = cHK_YN;
 	}
+	public String getEVNT_NM() {
+		return EVNT_NM;
+	}
+	public void setEVNT_NM(String eVNT_NM) {
+		EVNT_NM = eVNT_NM;
+	}
+	public String getREC_DT() {
+		return REC_DT;
+	}
+	public void setREC_DT(String rEC_DT) {
+		REC_DT = rEC_DT;
+	}
+	public String getEVNT_NO() {
+		return EVNT_NO;
+	}
+	public void setEVNT_NO(String eVNT_NO) {
+		EVNT_NO = eVNT_NO;
+	}
+	
+	
+	
+	
+	
 
 	
 	

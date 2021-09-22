@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.test.dao.EvntAssetSelDao"> 
-<select id="list" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
+<select id="lst" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
 SELECT A.EVNT_NO
 	 , A.WK_DT
      , B.KR_NM EVNT_NM
@@ -10,6 +10,7 @@ SELECT A.EVNT_NO
      , NVL(C.KR_NM, '-') EVNT_TYCD
      , NVL(D.KR_NM, '-') PAY_ASSET
      , NVL(E.KR_NM, '-') RCV_ASSET
+     , A.CHK_YN
   FROM evnt_asset				A
   LEFT JOIN info_evnt			B
     ON A.EVNT = B.EVNT
@@ -20,6 +21,9 @@ SELECT A.EVNT_NO
   LEFT JOIN info_asset			E
     ON A.RCV_ASSET = E.ASSET
  WHERE 1 = 1
+   AND (A.CHK_YN = 'Y'
+   		OR (A.WK_DT > CURDATE() AND A.CHK_YN = 'N')
+   		)
    AND A.WK_DT BETWEEN #{FROM_DT} AND #{TO_DT}
    <if test='PAY_YN !="true"'>
    AND A.EVNT != 'E0001'
@@ -37,6 +41,7 @@ SELECT A.EVNT_NO
    <if test="ASSET !=null and ASSET !=''">
    AND (A.PAY_ASSET = #{ASSET}
    		OR A.RCV_ASSET = #{ASSET}
+   		OR A.PAY_ASSET IN (SELECT ASSET FROM info_asset WHERE PAY_ASSET = #{ASSET})
    		)
    </if>
    <if test="ASSET_KIND !=null and ASSET_KIND !=''">
@@ -55,4 +60,40 @@ SELECT A.EVNT_NO
    </if>
  ORDER BY WK_DT DESC
 </select> 
+
+<insert id="ins" parameterType="EvntAssetSelVo">
+<selectKey keyProperty="EVNT_NO" resultType="string" order="BEFORE">
+SELECT CONCAT('EA', SUBSTR(#{WK_DT},3,6), LPAD(NVL(MAX(SUBSTR(EVNT_NO, 9,2)),0)+1,2,'0'))
+  FROM evnt_asset
+ WHERE 1=1
+   AND WK_DT = #{WK_DT}
+</selectKey>
+INSERT INTO evnt_asset
+		(
+			WK_DT
+		  , EVNT_NO
+		  , EVNT
+		  , PAY_ASSET
+		  , RCV_ASSET
+		  , AMT
+		  , EVNT_TYCD
+		  , FIRM
+		  , DTL
+		  , CHK_YN
+		)
+VALUES
+		(
+			#{WK_DT}
+		  , #{EVNT_NO}
+		  , #{EVNT}
+		  , #{PAY_ASSET}
+		  , #{RCV_ASSET}
+		  , #{AMT}
+		  , #{EVNT_TYCD}
+		  , #{FIRM}
+		  , #{DTL}
+		  , #{CHK_YN}
+		
+		)
+</insert> 
 </mapper>

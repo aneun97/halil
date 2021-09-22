@@ -2,14 +2,14 @@
 - 자산 입출금 메인
 ---------------------------*/
 
-var dstEvntLst;
+var dstFixEvntAssetLst;
+
 var dstAsset;
-var dstAssetKind;
 var dstEvnt;
 var dstEvntTycd;
 var IOmode;
 
-evntAssetSel_init();
+fixEvntAssetMgr_init();
 
 
 
@@ -17,41 +17,20 @@ evntAssetSel_init();
 /*
  * 화면 오픈 함수
  */
-function evntAssetSel_init(){
+function fixEvntAssetMgr_init(){
 	IOmode = 'S';
-	fnSetToday();
 	set_dstAsset();
-	set_dstAssetKind();
 	set_dstEvnt();
 	set_dstEvntTycd();
 }
 
-/*
- * 당일 날짜 설정
- */
-function fnSetToday() {
- let sToday = new Date();
- var sYear = sToday.getFullYear().toString();
- var sMonth = gfnLpad((sToday.getMonth()+1).toString(), 2, '0');
- var sDate = gfnLpad(sToday.getDate().toString(), 2, '0');
- document.getElementById("FROM_DT").value = sYear+sMonth+"01";
- document.getElementById("TO_DT").value = sYear+sMonth+sDate;
-};
+
 
 
 /*
  * 조회버튼 클릭
  */
 function onClick_btnSer(){
-	
-	var fromDt = document.getElementById('FROM_DT').value;
-	var toDt = document.getElementById('TO_DT').value;
-	var chkPay = document.getElementById('chkPay').checked;
-	var chkRcv = document.getElementById('chkRcv').checked;
-	var chkEtc = document.getElementById('chkEtc').checked;
-	var selAssetKind = document.getElementById('selAssetKind').value;
-	var selAsset = document.getElementById('selAsset').value;
-	var selEvntTycd = document.getElementById('selEvntTycd').value;
 
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
 	var xhr = new XMLHttpRequest();
@@ -66,14 +45,6 @@ function onClick_btnSer(){
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xhr.send(
-		"FROM_DT="+fromDt
-		+"&TO_DT="+toDt
-		+"&PAY_YN="+chkPay
-		+"&RCV_YN="+chkRcv
-		+"&ETC_YN="+chkEtc
-		+"&ASSET_KIND="+selAssetKind
-		+"&ASSET="+selAsset
-		+"&EVNT_TYCD="+selEvntTycd
 		);
 	
 	xhr.onload = function () {
@@ -81,8 +52,8 @@ function onClick_btnSer(){
 	  if (xhr.status === 200) {
 	    // 서버로 부터 받은 데이터를 처리할 코드
 		var resText = xhr.responseText;
-		dstEvntLst = JSON.parse(resText);
-		set_grdEvntList();
+		dstFixEvntAssetLst = JSON.parse(resText);
+		set_grdFixEvntAssetLst();
 	  }
 	}
 }
@@ -97,8 +68,6 @@ function onClick_btnIns(){
 	document.getElementById('divMan').className = "backDiv";
 	document.getElementById('divDtl').style.display = "block";
 	
-	//var pcSel = document.getElementById('selAssetKind');	
-	//set_selAssetKind(pcSel);
 	
 }
 
@@ -112,13 +81,13 @@ function onClick_btnSav(){
 			alert("IOmode::"+IOmode);
 			break;
 		case "I" :
-			upd_evntAsset("ins");
+			upd_fixEvntAsset("ins");
 			break;
 		case "U" :
-			upd_evntAsset("upd"); 	
+			upd_fixEvntAsset("upd"); 	
 			break;
 		case "D" :
-			upd_evntAsset("del"); 	
+			upd_fixEvntAsset("del"); 	
 			break;
 		default	:
 			break;
@@ -153,99 +122,45 @@ function onClick_btnCls(){
 
 
 /*
- * 상세팝업 이벤트선택지 변경이벤트
- */
-function onchange_dtlSelEvnt() {
-
-	var sEvnt = document.getElementById("dtlSelEvnt"); 
-	var sEvntPayTycd = sEvnt.options[sEvnt.selectedIndex].getAttribute('payTycd');
-	var sEvntRcvTycd = sEvnt.options[sEvnt.selectedIndex].getAttribute('rcvTycd');
-	
-	if(sEvntPayTycd == "N") {
-		document.getElementById("dtlLabPayAsset").style.display = "none";
-		document.getElementById("dtlSelPayAsset").style.display = "none";
-		document.getElementById("dtlSelPayAsset").selectedIndex = 0;
-	}
-	else {
-		document.getElementById("dtlLabPayAsset").style.display = "block";
-		document.getElementById("dtlSelPayAsset").style.display = "block";
-	}
-	
-	if(sEvntRcvTycd == "N") {
-		document.getElementById("dtlLabRcvAsset").style.display = "none";
-		document.getElementById("dtlSelRcvAsset").style.display = "none";
-		document.getElementById("dtlSelRcvAsset").selectedIndex = 0;
-	}
-	else {
-		document.getElementById("dtlLabRcvAsset").style.display = "block";
-		document.getElementById("dtlSelRcvAsset").style.display = "block";
-	}
-}
-
-
-/*
  * 상세 팝업 초기화
  */
 function set_divDtl_init(){
-	document.getElementById('dtlTxtWkDt').value = null;
 	document.getElementById('dtlSelEvnt').value = '';
 	document.getElementById('dtlSelPayAsset').value = '';
-	document.getElementById('dtlSelRcvAsset').value = '';
+	document.getElementById('dtlSelrcvAsset').value = '';
 	document.getElementById('dtlTxtAmt').value = null;
 	document.getElementById('dtlSelEvntTycd').value = '';
 	document.getElementById('dtlTxtFirm').value = null;
 	document.getElementById('dtlTxtDtl').value = null;
+	document.getElementById('dtlTxtEvntPer').value = null;
+	document.getElementById('dtlTxtEvntDt').value = null;
+	document.getElementById('dtlTxtFromDt').value = null;
+	document.getElementById('dtlTxtToDt').value = null;
 }
 
 /*
  * 조회버튼 클릭
  */
-function set_grdEvntList()
+function set_grdFixEvntAssetLst()
 {
-	
-		var nTotalPayAmt = 0;
-		var nTotalRcvAmt = 0;		
-		
-		dstEvntLst.forEach(function(e, i) 
+			
+		dstFixEvntAssetLst.forEach(function(e, i) 
 		{ 
-		
-			if(e.evnt_NM == "지출")
-			{
-				nTotalPayAmt += e.amt;
-			}
-			else if(e.evnt_NM == "수입")
-			{
-				nTotalRcvAmt += e.amt;
-			}
 
-			if(e.chk_YN == "N")
-			{
-				dstEvntLst[i] = `<div class="item" style="border: 2px solid #eee; background-color: yellow;" onclick="onClick_grdRow('${e.evnt_NO}')">
-									<div class="cell">${e.wk_DT}</div>
+
+				dstFixEvntAssetLst[i] = `<div class="item" style="border: 2px solid #eee;" onclick="onClick_grdRow('${e.fix_EVNT_NO}')">
+									<div class="cell">${e.from_DT}</div>
+									<div class="cell">${e.to_DT}</div>
 									<div class="cell">${e.evnt_NM}</div>
 									<div class="cell">${e.evnt_TYCD}</div>
 									<div class="cell">${e.pay_ASSET}</div>
 									<div class="cell">${e.rcv_ASSET}</div>
 									<div class="cell" style="text-align: right;">${gfnSetComma(e.amt)} 원</div>
 							   </div>`;
-			}
-			else
-			{
-				dstEvntLst[i] = `<div class="item" style="border: 2px solid #eee;" onclick="onClick_grdRow('${e.evnt_NO}')">
-									<div class="cell">${e.wk_DT}</div>
-									<div class="cell">${e.evnt_NM}</div>
-									<div class="cell">${e.evnt_TYCD}</div>
-									<div class="cell">${e.pay_ASSET}</div>
-									<div class="cell">${e.rcv_ASSET}</div>
-									<div class="cell" style="text-align: right;">${gfnSetComma(e.amt)} 원</div>
-							   </div>`;
-			}
 		}
 		)
-		document.querySelector('.grdEvntList').innerHTML = dstEvntLst.join('');
+		document.querySelector('.grdEvntList').innerHTML = dstFixEvntAssetLst.join('');
 		
-  		document.getElementById('txtPayAmt').innerText = gfnSetComma(nTotalPayAmt);
-  		document.getElementById('txtRcvAmt').innerText = gfnSetComma(nTotalRcvAmt);
 }
 
 
@@ -258,10 +173,7 @@ function set_grdEvntList()
  * 자산 데이터셋 세팅
  */
 function set_dstAsset(){
-	
-	var fromDt = document.getElementById('FROM_DT').value;
-	var toDt = document.getElementById('TO_DT').value;
-	
+		
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
 	var xhr = new XMLHttpRequest();
 	
@@ -271,8 +183,7 @@ function set_dstAsset(){
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xhr.send(
-	     "FROM_DT=" +fromDt
-		+"&TO_DT=" +toDt
+	     "WK_DT=" +gfnGetToday()
 	);
 	
 	xhr.onload = function () {
@@ -283,45 +194,15 @@ function set_dstAsset(){
 		
 		dstAsset = JSON.parse(resText);
 		
-		var pcSel = document.getElementById('selAsset');		
-		set_selAsset(pcSel);
-		
 		pcSel = document.getElementById('dtlSelPayAsset');		
 		set_selAsset(pcSel);
 		
-		pcSel = document.getElementById('dtlSelRcvAsset');		
+		pcSel = document.getElementById('dtlSelrcvAsset');		
 		set_selAsset(pcSel);
 	  }
 	}
 }
 
-/*
- * 자산종류 데이터셋 세팅
- */
-function set_dstAssetKind(){
-		
-	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
-	var xhr = new XMLHttpRequest();
-	
-	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
-	xhr.open("POST", "/syCommonsel/lstAssetKind", true);
-	
-	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.send();
-	
-	xhr.onload = function () {
-	  // xhr 객체의 status 값을 검사한다.
-	  if (xhr.status === 200) {
-	    // 서버로 부터 받은 데이터를 처리할 코드
-		var resText = xhr.responseText;
-		
-		dstAssetKind = JSON.parse(resText);
-		var pcSel = document.getElementById('selAssetKind');	
-		set_selAssetKind(pcSel);
-	  }
-	}
-}
 
 /*
  * 이벤트 데이터셋 세팅
@@ -345,6 +226,7 @@ function set_dstEvnt(){
 		var resText = xhr.responseText;
 		
 		dstEvnt = JSON.parse(resText);
+		
 		var pcSel = document.getElementById('dtlSelEvnt');	
 		set_selEvnt(pcSel);
 	  }
@@ -373,8 +255,6 @@ function set_dstEvntTycd(){
 		var resText = xhr.responseText;
 		
 		dstEvntTycd = JSON.parse(resText);
-		var pcSel = document.getElementById('selEvntTycd');	
-		set_selEvntTycd(pcSel);
 		
 		var pcSel = document.getElementById('dtlSelEvntTycd');	
 		set_selEvntTycd(pcSel);
@@ -401,19 +281,6 @@ function set_selAsset(pcSel, psAssetKind){
 			opt.innerText = e.kr_NM;
 			pcSel.appendChild(opt);
 		}
-	})
-}
-
-/*
- * 자산종류 셀렉트박스 세팅
- */
-function set_selAssetKind(pcSel){
-	
-	dstAssetKind.forEach(function(e) {
-		var opt = document.createElement('option');
-		opt.setAttribute('value', e.asset_KIND);
-		opt.innerText = e.kr_NM;
-		pcSel.appendChild(opt);
 	})
 }
 
@@ -445,38 +312,8 @@ function set_selEvntTycd(pcSel){
 	})
 }
 
-/*
- * 자산종류 셀렉트 변경이벤트
- */
-function onchange_selAssetKind() {
-	var pcSel = document.getElementById('selAsset');
-	var psAssetKind = document.getElementById('selAssetKind').value;
-	set_selAsset(pcSel, psAssetKind);
-}
 
 
-/*
- * 전체 체크박스 변경이벤트
- */
-function onchange_chkAll(){
-	if(document.getElementById("chkAll").checked == true){
-		document.getElementById("chkPay").checked = true;
-		document.getElementById("chkRcv").checked = true;
-		document.getElementById("chkEtc").checked = true;
-		
-		document.getElementById("chkPay").disabled = true;
-		document.getElementById("chkRcv").disabled = true;
-		document.getElementById("chkEtc").disabled = true;
-	}else{
-		document.getElementById("chkPay").checked = false;
-		document.getElementById("chkRcv").checked = false;
-		document.getElementById("chkEtc").checked = false;
-		
-		document.getElementById("chkPay").disabled = false;
-		document.getElementById("chkRcv").disabled = false;
-		document.getElementById("chkEtc").disabled = false;
-	}
-}
 
 
 
@@ -485,36 +322,39 @@ function onchange_chkAll(){
 /*
  * 신규입력
  */
-function upd_evntAsset(sParam){
+function upd_fixEvntAsset(sParam){
 	
-	var sWkDt = document.getElementById('dtlTxtWkDt').value;
 	var sEvnt = document.getElementById('dtlSelEvnt').value;
 	var sPayAsset = document.getElementById('dtlSelPayAsset').value;
-	var sRcvAsset = document.getElementById('dtlSelRcvAsset').value;
+	var sRcvAsset = document.getElementById('dtlSelrcvAsset').value;
 	var nAmt = document.getElementById('dtlTxtAmt').value;
 	var sEvntTycd = document.getElementById('dtlSelEvntTycd').value;
 	var sFirm = document.getElementById('dtlTxtFirm').value;
 	var sDtl = document.getElementById('dtlTxtDtl').value;
+	var sEvntPer = document.getElementById('dtlTxtEvntPer').value;
+	var sEvntDt = document.getElementById('dtlTxtEvntDt').value;
+	var sFromDt = document.getElementById('dtlTxtFromDt').value;
+	var sToDt = document.getElementById('dtlTxtToDt').value;
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
 	var xhr = new XMLHttpRequest();
 	
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
 	xhr.open("POST", sParam, true);
 
-	//var startDate = viewYear.toString().concat(gfnLpad(viewMonth.toString(),2,"0"),gfnLpad(prevDates[0].toString(),2,"0"));
-	//var endDate = viewYear.toString().concat(gfnLpad((viewMonth+2).toString(),2,"0"),gfnLpad(nextDates[nextDates.length-1].toString(),2,"0"));
-
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.send("WK_DT="+sWkDt
-			+"&EVNT="+sEvnt
+	xhr.send("&EVNT="+sEvnt
 			+"&PAY_ASSET="+sPayAsset
 			+"&RCV_ASSET="+sRcvAsset
 			+"&AMT="+nAmt
 			+"&EVNT_TYCD="+sEvntTycd
 			+"&FIRM="+sFirm
 			+"&DTL="+sDtl
+			+"&EVNT_PER="+sEvntPer
+			+"&EVNT_DT="+sEvntDt
+			+"&FROM_DT="+sFromDt
+			+"&TO_DT="+sToDt
 			);
 	
 	xhr.onload = function () {

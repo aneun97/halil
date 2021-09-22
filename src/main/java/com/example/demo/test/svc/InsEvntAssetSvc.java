@@ -211,7 +211,7 @@ public class InsEvntAssetSvc {
 			oChrgEvnt.setAMT(oMastAsset.getCHRG_AMT());
 
 			isrt(oChrgEvnt);
-			}
+		}
 		
 	}
 

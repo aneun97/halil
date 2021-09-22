@@ -10,5 +10,6 @@ import com.example.demo.test.vo.EvntAssetSelVo;
 @Repository
 @Mapper
 public interface EvntAssetSelDao {
-	List<EvntAssetSelVo> list(EvntAssetSelVo evntAssetSelVo);
+	List<EvntAssetSelVo> lst(EvntAssetSelVo evntAssetSelVo);
+	void ins(EvntAssetSelVo evntAssetSelVo);
 }

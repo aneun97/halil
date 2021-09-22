@@ -24,7 +24,8 @@
 }
 .content {
 	background-color: white;
-  padding: 3rem;
-  border-radius: 1rem;
-  border-style: double; border-width: 2px;
+	padding: 3rem;
+	border-radius: 1rem;
+	border-style: double; 
+	border-width: 2px;
 }

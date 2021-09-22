@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.FixEvntAssetMgrDao"> 
+
+<select id="lst" parameterType="FixEvntAssetMgrVo" resultType="FixEvntAssetMgrVo">
+SELECT A.FIX_EVNT_NO
+     , B.KR_NM AS EVNT_NM
+     , A.AMT
+     , NVL(C.KR_NM, '-') EVNT_TYCD
+     , NVL(D.KR_NM, '-') PAY_ASSET
+     , NVL(E.KR_NM, '-') RCV_ASSET
+     , A.FROM_DT
+     , A.TO_DT
+  FROM fix_evnt_asset			A
+  LEFT JOIN info_evnt			B
+    ON A.EVNT = B.EVNT
+  LEFT JOIN info_evnt_hcls		C
+    ON A.EVNT_TYCD = C.EVNT_HCLS
+  LEFT JOIN info_asset			D
+    ON A.PAY_ASSET = D.ASSET
+  LEFT JOIN info_asset			E
+    ON A.RCV_ASSET = E.ASSET
+ WHERE 1 = 1
+   <if test="EVNT_TYCD !=null and EVNT_TYCD !=''">
+   AND A.EVNT_TYCD = #{EVNT_TYCD}
+   </if>
+</select> 
+
+<insert id="ins" parameterType="FixEvntAssetMgrVo">
+<selectKey keyProperty="FIX_EVNT_NO" resultType="string" order="BEFORE">
+SELECT CONCAT('FEA', LPAD(NVL(MAX(SUBSTR(FIX_EVNT_NO, 4,5)),0)+1,5,'0'))
+  FROM fix_evnt_asset
+</selectKey>
+INSERT INTO fix_evnt_asset
+		(
+			FIX_EVNT_NO
+		  , EVNT
+		  , PAY_ASSET
+		  , RCV_ASSET
+		  , AMT
+		  , EVNT_TYCD
+		  , FIRM
+		  , DTL
+		  , EVNT_PER
+		  , EVNT_DT
+		  , FROM_DT
+		  , TO_DT
+		  , AMT_ID_TYCD
+		  , AMT_ID
+		)
+VALUES
+		(
+			#{FIX_EVNT_NO}
+		  , #{EVNT}
+		  , #{PAY_ASSET}
+		  , #{RCV_ASSET}
+		  , #{AMT}
+		  , #{EVNT_TYCD}
+		  , #{FIRM}
+		  , #{DTL}
+		  , #{EVNT_PER}
+		  , #{EVNT_DT}
+		  , #{FROM_DT}
+		  , #{TO_DT}
+		  , #{AMT_ID_TYCD}
+		  , #{AMT_ID}
+		
+		)
+</insert> 
+
+<insert id="insAssetEvnt" parameterType="FixEvntAssetMgrVo">
+<selectKey keyProperty="EVNT_NO" resultType="string" order="BEFORE">
+SELECT CONCAT('EA', SUBSTR(#{WK_DT},3,6), LPAD(NVL(MAX(SUBSTR(EVNT_NO, 9,2)),0)+1,2,'0'))
+  FROM evnt_asset
+ WHERE 1=1
+   AND WK_DT = #{WK_DT}
+</selectKey>
+INSERT INTO evnt_asset
+		(
+			WK_DT
+		  , EVNT_NO
+		  , EVNT
+		  , PAY_ASSET
+		  , RCV_ASSET
+		  , AMT
+		  , EVNT_TYCD
+		  , FIRM
+		  , DTL
+		  , FIX_EVNT_NO
+		  , CHK_YN
+		)
+VALUES
+		(
+			#{WK_DT}
+		  , #{EVNT_NO}
+		  , #{EVNT}
+		  , #{PAY_ASSET}
+		  , #{RCV_ASSET}
+		  , #{AMT}
+		  , #{EVNT_TYCD}
+		  , #{FIRM}
+		  , #{DTL}
+		  , #{FIX_EVNT_NO}
+		  , 'N'		
+		)
+</insert> 
+
+<update id="updRecDt" parameterType="FixEvntAssetMgrVo">
+UPDATE fix_evnt_asset
+   SET REC_DT = #{REC_DT}
+ WHERE FIX_EVNT_NO = #{FIX_EVNT_NO}
+</update>
+</mapper>

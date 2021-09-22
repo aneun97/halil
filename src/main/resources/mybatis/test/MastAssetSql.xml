@@ -1,36 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.demo.test.dao.InsEvntAssetDao"> 
-<select id="lstEvnt" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
-SELECT EVNT
-     , KR_NM
-     , RCV_TYCD
-     , PAY_TYCD
-  FROM info_evnt
-</select> 
-<select id="lstAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
-SELECT ASSET
-     , KR_NM
-     , ASSET_KIND
-  FROM info_asset
- ORDER BY SORT_NO
-</select> 
-<select id="lstEvntTycd" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
-SELECT EVNT
-     , EVNT_HCLS
-     , KR_NM
-  FROM info_evnt_hcls
-</select> 
-<select id="viewEvnt" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
-SELECT EVNT
-     , KR_NM
-     , RCV_TYCD
-     , PAY_TYCD
-  FROM info_evnt
- WHERE EVNT = #{EVNT}
-</select> 
-<select id="viewMastAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
+<mapper namespace="com.example.demo.test.dao.MastAssetDao">
+<select id="viwMastAsset" parameterType="MastAssetVo" resultType="MastAssetVo">
 SELECT A.ASSET
      , A.KR_NM
      , B.DC_TYCD
@@ -38,18 +10,20 @@ SELECT A.ASSET
      , A.CHRG_ASSET
      , A.CHRG_COND_AMT
      , A.CHRG_AMT
-     , DATE_FORMAT(C.WK_DT, '%Y%m%d') BEF_WK_DT
-     , C.BEF_AMT BEF_BEF_AMT
-     , C.INC_AMT BEF_INC_AMT
-     , C.DEC_AMT BEF_DEC_AMT
-     , C.AMT BEF_AMT
-     , DATE_FORMAT(C.BEF_DT, '%Y%m%d') BEF_BEF_DT
-     , DATE_FORMAT(D.WK_DT, '%Y%m%d') AFT_WK_DT
-     , D.BEF_AMT AFT_BEF_AMT
-     , D.INC_AMT AFT_INC_AMT
-     , D.DEC_AMT AFT_DEC_AMT
-     , D.AMT AFT_AMT
-     , DATE_FORMAT(D.BEF_DT, '%Y%m%d') AFT_BEF_DT
+     , DATE_FORMAT(C.WK_DT, '%Y%m%d') AS BEF_WK_DT
+     , C.BEF_AMT AS BEF_BEF_AMT
+     , C.INC_AMT AS BEF_INC_AMT
+     , C.DEC_AMT AS BEF_DEC_AMT
+     , C.AMT AS BEF_AMT
+     , DATE_FORMAT(C.BEF_DT, '%Y%m%d') AS BEF_BEF_DT
+     , DATE_FORMAT(D.WK_DT, '%Y%m%d') AS AFT_WK_DT
+     , D.BEF_AMT AS AFT_BEF_AMT
+     , D.INC_AMT AS AFT_INC_AMT
+     , D.DEC_AMT AS AFT_DEC_AMT
+     , D.AMT AS AFT_AMT
+     , DATE_FORMAT(D.BEF_DT, '%Y%m%d') AS AFT_BEF_DT
+     , #{WK_DT}	AS WK_DT
+     , #{AMT}	AS AMT
   FROM info_asset A
   LEFT JOIN info_asset_kind B
     ON A.ASSET_KIND = B.ASSET_KIND
@@ -107,55 +81,8 @@ SELECT A.ASSET
    				)
    </if> -->
 </select> 
-<insert id="isrt" parameterType="InsEvntAssetVo">
-<selectKey keyProperty="EVNT_NO" resultType="string" order="BEFORE">
-SELECT CONCAT('EA', SUBSTR(#{WK_DT},3,6), LPAD(NVL(MAX(SUBSTR(EVNT_NO, 9,2)),0)+1,2,'0'))
-  FROM evnt_asset
- WHERE 1=1
-   AND WK_DT = #{WK_DT}
-</selectKey>
-INSERT INTO evnt_asset
-		(
-			WK_DT
-		  , EVNT_NO
-		  , EVNT
-		  , PAY_ASSET
-		  , RCV_ASSET
-		  , AMT
-		  , EVNT_TYCD
-		  , FIRM
-		  , DTL
-		  , CHK_YN
-		)
-VALUES
-		(
-			#{WK_DT}
-		  , #{EVNT_NO}
-		  , #{EVNT}
-		  , #{PAY_ASSET}
-		  , #{RCV_ASSET}
-		  , #{AMT}
-		  , #{EVNT_TYCD}
-		  , #{FIRM}
-		  , #{DTL}
-		  , 'Y'
-		
-		)
-</insert> 
-<select id="lstMastAsset" parameterType="InsEvntAssetVo" resultType="InsEvntAssetVo">
-SELECT DATE_FORMAT(WK_DT, '%Y%m%d')
-     , ASSET
-     , BEF_AMT
-     , INC_AMT
-     , DEC_AMT
-     , AMT
-     , DATE_FORMAT(BEF_DT, '%Y%m%d')
-  FROM mast_asset
- WHERE 1 = 1
-   AND ASSET = #{ASSET}
-   AND WK_DT = (SELECT MAX(WK_DT) FROM mast_asset WHERE ASSET = #{ASSET})
-</select>
-<insert id="isrtMastAsset" parameterType="InsEvntAssetVo">
+
+<insert id="insMastAsset" parameterType="mastAssetVo">
 INSERT INTO mast_asset
 		(
 			WK_DT
@@ -177,7 +104,8 @@ VALUES
 		  , #{BEF_DT}		
 		)
 </insert>
-<update id="updtMastAsset" parameterType="InsEvntAssetVo">
+
+<update id="updMastAsset" parameterType="mastAssetVo">
 UPDATE mast_asset
    SET INC_AMT = #{INC_AMT}
      , DEC_AMT = #{DEC_AMT}
@@ -185,20 +113,23 @@ UPDATE mast_asset
  WHERE WK_DT = #{WK_DT}
    AND ASSET = #{ASSET}
 </update>
-<update id="updtMastAssetAft" parameterType="InsEvntAssetVo">
+
+<update id="updMastAssetAft" parameterType="MastAssetVo">
 UPDATE mast_asset
    SET BEF_DT = #{BEF_DT}
  WHERE WK_DT = #{WK_DT}
    AND ASSET = #{ASSET}
 </update>
-<update id="updtDecAssetAft" parameterType="InsEvntAssetVo">
+
+<update id="updDecAssetAft" parameterType="MastAssetVo">
 UPDATE mast_asset
    SET BEF_AMT 	= BEF_AMT 	- #{AMT}
      , AMT 		= AMT 		- #{AMT}
  WHERE WK_DT <![CDATA[>]]> #{WK_DT}
    AND ASSET = #{ASSET}
 </update>
-<update id="updtIncAssetAft" parameterType="InsEvntAssetVo">
+
+<update id="updIncAssetAft" parameterType="MastAssetVo">
 UPDATE mast_asset
    SET BEF_AMT 	= BEF_AMT 	+ #{AMT}
      , AMT 		= AMT 		+ #{AMT}

@@ -3,59 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/evntAssetSel.css}" rel="stylesheet" type="text/css">
-	<title>자산조회</title>
+	<title>고정변동자산관리</title>
 </head>
 <body>
 <div id="divMan">
 	<input type="text" id="EVNT_NO" style="display: none;" th:value="${EVNT_NO}">
 	<form method="post" action="list">
 		<p>
-			<label>조회기간</label>
-			<input type="text" name="FROM_DT" id="FROM_DT" value=${FROM_DT}>
-			<input type="text" name="TO_DT" id="TO_DT" value=${TO_DT}>
 			<button type="button" onclick="onClick_btnSer()">조회</button>
 			<button type="button" onclick="onClick_btnIns()">입력</button>
 		</p>
-		<p>
-			<label>분류: </label>
-			<label>전체<input type="checkbox" name='EVNT_TYCD' id='chkAll' checked="checked" onchange="onchange_chkAll()"></label>			
-			<label>지출<input type="checkbox" name='EVNT_TYCD' id='chkPay' checked="checked" disabled="disabled"></label>
-			<label>수입<input type="checkbox" name='EVNT_TYCD' id='chkRcv' checked="checked" disabled="disabled"></label>			
-			<label>기타<input type="checkbox" name='EVNT_TYCD' id='chkEtc' checked="checked" disabled="disabled"></label>			
-		</p>
-		<p>
-			<label id="labAsset">자산 
-				<select name="PAY_ASSET_KIND" id="selAssetKind" class="PAY_ASSET_KIND" onchange="onchange_selAssetKind()">
-					<option value=''>-</option>
-				</select>
-				<select name="PAY_ASSET" id="selAsset" class="PAY_ASSET">
-					<option value=''>-</option>
-				</select>
-			</label>
-			<label id="labEvntTycd">이벤트타입 
-				<select id="selEvntTycd">
-					<option value=''>-</option>
-				</select>
-			</label>
-		</p>
 	</form>
-	
-	<div id="total">
-	<h1 style="color: red">
-		<span>지출총액:  </span>
-		<span id="txtPayAmt"></span>
-		<span>원</span>
-	</h1>
-	<h1 style="color: blue">
-		<span>수입총액:  </span>
-		<span id="txtRcvAmt"></span>
-		<span>원</span>
-	</h1>
-	</div>
 	
 	<div class="container1">
 		<div class="item" style="border: 2px dashed maroon">
-			<div class="cell">발생일</div>
+			<div class="cell">시작일</div>
+			<div class="cell">종료일</div>
 			<div class="cell">이벤트</div>
 			<div class="cell">분류</div>
 			<div class="cell">출금처</div>
@@ -73,24 +36,23 @@
 	<button type="button" onclick="onClick_btnDel()">삭제</button>
 	<button type="button" onclick="onClick_btnSav()">저장</button>
 	<button type="button" onclick="onClick_btnCls()">닫기</button>
-		<p><label>발생일 <input type="text" id="dtlTxtWkDt"></label></p>
 		<p>
 			<label>이벤트 
-			<select name="dtlSelEvnt" id="dtlSelEvnt" onchange="onchange_dtlSelEvnt()">
+			<select name="EVNT" id="dtlSelEvnt" onchange="evnt_onchange()">
 			<option value=''>-</option>
 			</select>
 			</label>
 		</p>
 		<p>
-			<label id="dtlLabPayAsset">출금처 
+			<label id="labPAY_ASSET">출금처 
 			<select name="PAY_ASSET" id="dtlSelPayAsset" class="PAY_ASSET">
 			<option value=''>-</option>
 			</select>
 			</label>
 		</p>
 		<p>
-			<label id="dtlLabRcvAsset">입금처 
-			<select name="RCV_ASSET" id="dtlSelRcvAsset" class="RCV_ASSET">
+			<label id="labRCV_ASSET">입금처 
+			<select name="RCV_ASSET" id="dtlSelrcvAsset" class="RCV_ASSET">
 			<option value=''>-</option>
 			</select>
 			</label>
@@ -105,9 +67,14 @@
 		</p>
 		<p><label>거래처 <input type="text" id="dtlTxtFirm"></label></p>
 		<p><label>설명 <input type="text" id="dtlTxtDtl"></label></p>
+		<p><label>발생주기 <input type="text" id="dtlTxtEvntPer"></label></p>
+		<p><label>(D:매일,W:주1,M:월1,Y:년1)</label></p>
+		<p><label>발생일 <input type="text" id="dtlTxtEvntDt"></label></p>
+		<p><label>시작일 <input type="text" id="dtlTxtFromDt"></label></p>
+		<p><label>종료일 <input type="text" id="dtlTxtToDt"></label></p>
   </div>
 </div>
 </body>
 <script th:src="@{/js/commonFunction.js}" charset="UTF-8"></script>
-<script th:src="@{/js/evntAssetSel.js}" charset="UTF-8"></script>
+<script th:src="@{/js/fixEvntAssetMgr.js}" charset="UTF-8"></script>
 </html>
