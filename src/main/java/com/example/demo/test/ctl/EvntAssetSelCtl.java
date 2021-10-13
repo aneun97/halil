@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.test.svc.EvntAssetSelSvc;
 import com.example.demo.test.vo.EvntAssetSelVo;
-import com.example.demo.test.vo.InsEvntAssetVo;
 
 @RestController
 @RequestMapping(value = "/evntAssetSel")
@@ -31,15 +30,24 @@ public class EvntAssetSelCtl {
 	}
 	
 	@RequestMapping("/viw")
-	public ModelAndView viw(InsEvntAssetVo insEvntAssetVo) throws Exception{
-		ModelAndView mav = new ModelAndView("insEvntAsset");
-		mav.addObject("EVNT_NO", insEvntAssetVo.getEVNT_NO());
-		return mav;
+	public EvntAssetSelVo viw(EvntAssetSelVo evntAssetSelVo) {
+		EvntAssetSelVo resultVo = evntAssetSelSvc.viw(evntAssetSelVo);
+		return resultVo;		
 	}
 
 	@RequestMapping("/ins")
-	public void ins(EvntAssetSelVo evntAssetSelVo) {
+	public void ins(EvntAssetSelVo evntAssetSelVo) throws Exception {
 		evntAssetSelSvc.ins(evntAssetSelVo);
+	}
+
+	@RequestMapping("/upd")
+	public void upd(EvntAssetSelVo evntAssetSelVo) throws Exception {
+		evntAssetSelSvc.upd(evntAssetSelVo);
+	}
+
+	@RequestMapping("/del")
+	public void del(EvntAssetSelVo evntAssetSelVo) throws Exception {
+		evntAssetSelSvc.del(evntAssetSelVo);
 	}
 	
 }

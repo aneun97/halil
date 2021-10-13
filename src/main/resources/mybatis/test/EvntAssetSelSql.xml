@@ -3,6 +3,7 @@
 
 <mapper namespace="com.example.demo.test.dao.EvntAssetSelDao"> 
 <select id="lst" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
+/* com.example.demo.test.dao.EvntAssetSelDao.lst */
 SELECT A.EVNT_NO
 	 , A.WK_DT
      , B.KR_NM EVNT_NM
@@ -21,9 +22,7 @@ SELECT A.EVNT_NO
   LEFT JOIN info_asset			E
     ON A.RCV_ASSET = E.ASSET
  WHERE 1 = 1
-   AND (A.CHK_YN = 'Y'
-   		OR (A.WK_DT > CURDATE() AND A.CHK_YN = 'N')
-   		)
+   AND A.CHK_YN != 'R'
    AND A.WK_DT BETWEEN #{FROM_DT} AND #{TO_DT}
    <if test='PAY_YN !="true"'>
    AND A.EVNT != 'E0001'
@@ -61,7 +60,45 @@ SELECT A.EVNT_NO
  ORDER BY WK_DT DESC
 </select> 
 
+<select id="lstUnChk" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
+/*com.example.demo.test.dao.EvntAssetSelDao.lstUnChk*/
+SELECT A.WK_DT
+	 , A.EVNT_NO
+	 , A.EVNT
+	 , A.PAY_ASSET
+	 , A.RCV_ASSET
+	 , A.AMT
+	 , A.EVNT_TYCD
+	 , A.FIRM
+	 , A.DTL
+	 , A.FIX_EVNT_NO
+	 , A.CHK_YN
+  FROM evnt_asset				A
+ WHERE 1 = 1
+   AND WK_DT <![CDATA[<]]> #{WK_DT}
+   AND A.CHK_YN = 'N'
+</select>
+
+<select id="viw" parameterType="EvntAssetSelVo" resultType="EvntAssetSelVo">
+/*com.example.demo.test.dao.EvntAssetSelDao.viw*/
+SELECT A.WK_DT
+	 , A.EVNT_NO
+	 , A.EVNT
+	 , A.PAY_ASSET
+	 , A.RCV_ASSET
+	 , A.AMT
+	 , A.EVNT_TYCD
+	 , A.FIRM
+	 , A.DTL
+	 , A.FIX_EVNT_NO
+	 , A.CHK_YN
+  FROM evnt_asset				A
+ WHERE 1 = 1
+   AND A.EVNT_NO = #{EVNT_NO}
+</select>
+
 <insert id="ins" parameterType="EvntAssetSelVo">
+/* com.example.demo.test.dao.EvntAssetSelDao.ins */
 <selectKey keyProperty="EVNT_NO" resultType="string" order="BEFORE">
 SELECT CONCAT('EA', SUBSTR(#{WK_DT},3,6), LPAD(NVL(MAX(SUBSTR(EVNT_NO, 9,2)),0)+1,2,'0'))
   FROM evnt_asset
@@ -96,4 +133,25 @@ VALUES
 		
 		)
 </insert> 
+
+<update id="upd" parameterType="EvntAssetSelVo">
+/* com.example.demo.test.dao.EvntAssetSelDao.upd */
+UPDATE evnt_asset
+   SET CHK_YN = #{CHK_YN}
+     , WK_DT = #{WK_DT}
+     , PAY_ASSET = #{PAY_ASSET}
+     , RCV_ASSET = #{RCV_ASSET}
+     , AMT = #{AMT}
+     , EVNT_TYCD = #{EVNT_TYCD}
+     , FIRM = #{FIRM}
+     , DTL = #{DTL}
+ WHERE EVNT_NO = #{EVNT_NO}
+</update>
+
+<update id="del" parameterType="EvntAssetSelVo">
+/* com.example.demo.test.dao.EvntAssetSelDao.del */
+UPDATE evnt_asset
+   SET CHK_YN = 'R'
+ WHERE EVNT_NO = #{EVNT_NO}
+</update>
 </mapper>

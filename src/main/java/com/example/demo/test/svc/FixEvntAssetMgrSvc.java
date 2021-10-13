@@ -142,13 +142,13 @@ public class FixEvntAssetMgrSvc {
 			// 출금처가 있으면 출금처 원장 수정
 			if (!ObjectUtils.isEmpty(assetEvntVo.getPAY_ASSET())) {
 				oAsset.setASSET(assetEvntVo.getPAY_ASSET());			
-				mastAssetBiz.recMastAsset(oAsset, true);
+				mastAssetBiz.recMastAsset(oAsset, true, true);
 			}
 
 			// 입금처가 있으면 입금처 원장 수정
 			if (!ObjectUtils.isEmpty(assetEvntVo.getRCV_ASSET())) {
 				oAsset.setASSET(assetEvntVo.getRCV_ASSET());			
-				mastAssetBiz.recMastAsset(oAsset, false);				
+				mastAssetBiz.recMastAsset(oAsset, false, true);				
 			}
 
 			logger.info("작업일::"+assetEvntVo.getWK_DT());

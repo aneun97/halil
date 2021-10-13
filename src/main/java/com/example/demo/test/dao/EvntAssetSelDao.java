@@ -11,5 +11,9 @@ import com.example.demo.test.vo.EvntAssetSelVo;
 @Mapper
 public interface EvntAssetSelDao {
 	List<EvntAssetSelVo> lst(EvntAssetSelVo evntAssetSelVo);
+	List<EvntAssetSelVo> lstUnChk(EvntAssetSelVo evntAssetSelVo);
+	EvntAssetSelVo viw(EvntAssetSelVo evntAssetSelVo);
 	void ins(EvntAssetSelVo evntAssetSelVo);
+	void upd(EvntAssetSelVo evntAssetSelVo);
+	void del(EvntAssetSelVo evntAssetSelVo);
 }

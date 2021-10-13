@@ -3,6 +3,7 @@
 ---------------------------*/
 
 var dstEvntLst;
+var dstEvntDtl;
 var dstAsset;
 var dstAssetKind;
 var dstEvnt;
@@ -97,11 +98,45 @@ function onClick_btnIns(){
 	document.getElementById('divMan').className = "backDiv";
 	document.getElementById('divDtl').style.display = "block";
 	
+	set_divDtl_disabled(false);
+	onchange_dtlSelEvnt();
 	//var pcSel = document.getElementById('selAssetKind');	
 	//set_selAssetKind(pcSel);
 	
 }
 
+/*
+ * 수정버튼 클릭
+ */
+function onClick_btnUpd(){
+	IOmode = "U";
+	
+	document.getElementById('dtlTxtAmt').disabled = false;
+	document.getElementById('dtlSelPayAsset').disabled = false;
+	document.getElementById('dtlSelRcvAsset').disabled = false;
+	document.getElementById('dtlSelEvntTycd').disabled = false;
+	document.getElementById('dtlTxtFirm').disabled = false;
+	document.getElementById('dtlTxtDtl').disabled = false;
+	
+}
+
+/*
+ * 삭제버튼 클릭
+ */
+function onClick_btnDel(){
+	IOmode = "D";
+	onClick_btnSav();
+}
+
+/*
+ * 확인버튼 클릭
+ */
+function onClick_btnChk(){
+	IOmode = "U";
+	
+	dstEvntDtl.chk_YN = "Y";
+	onClick_btnSav();
+}
 
 /*
  * 상세 팝업 저장
@@ -112,13 +147,13 @@ function onClick_btnSav(){
 			alert("IOmode::"+IOmode);
 			break;
 		case "I" :
-			upd_evntAsset("ins");
+			rec_evntAsset("ins");
 			break;
 		case "U" :
-			upd_evntAsset("upd"); 	
+			rec_evntAsset("upd"); 	
 			break;
 		case "D" :
-			upd_evntAsset("del"); 	
+			rec_evntAsset("del"); 	
 			break;
 		default	:
 			break;
@@ -130,13 +165,42 @@ function onClick_btnSav(){
  * 상세 팝업 오픈
  */
 function onClick_grdRow(sEvntNo){
-/*	
-	console.log(sEvntNo);
+
 	IOmode = "S";
 	
 	document.getElementById('divMan').className = "backDiv";
 	document.getElementById('divDtl').style.display = "block";
-*/
+	// 읽기모드로 팝업창 실행
+	
+
+	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
+	var xhr = new XMLHttpRequest();
+	
+	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
+	xhr.open("POST", "viw", true);
+
+	//var startDate = viewYear.toString().concat(gfnLpad(viewMonth.toString(),2,"0"),gfnLpad(prevDates[0].toString(),2,"0"));
+	//var endDate = viewYear.toString().concat(gfnLpad((viewMonth+2).toString(),2,"0"),gfnLpad(nextDates[nextDates.length-1].toString(),2,"0"));
+
+	
+	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.send(
+		"EVNT_NO="+sEvntNo
+		);
+	
+	xhr.onload = function () {
+	  // xhr 객체의 status 값을 검사한다.
+	  if (xhr.status === 200) {
+	    // 서버로 부터 받은 데이터를 처리할 코드
+		var resText = xhr.responseText;
+		dstEvntDtl = JSON.parse(resText);
+		set_divDtl_disabled(true);
+		set_divDtlViw();
+		onchange_dtlSelEvnt();
+	  }
+	}
+
 	
 }
 
@@ -197,6 +261,38 @@ function set_divDtl_init(){
 	document.getElementById('dtlTxtDtl').value = null;
 }
 
+
+/*
+ * 상세 팝업 입력불가설정
+ */
+function set_divDtl_disabled(b){
+	document.getElementById('dtlTxtWkDt').disabled = b;
+	document.getElementById('dtlSelEvnt').disabled = b;
+	document.getElementById('dtlSelPayAsset').disabled = b;
+	document.getElementById('dtlSelRcvAsset').disabled = b;
+	document.getElementById('dtlTxtAmt').disabled = b;
+	document.getElementById('dtlSelEvntTycd').disabled = b;
+	document.getElementById('dtlTxtFirm').disabled = b;
+	document.getElementById('dtlTxtDtl').disabled = b;
+}
+	
+/*
+ * 상세 팝업 세팅
+ */
+function set_divDtlViw(){
+	
+	document.getElementById('dtlTxtWkDt').value = dstEvntDtl.wk_DT;
+	document.getElementById('dtlSelEvnt').value = dstEvntDtl.evnt;
+	document.getElementById('dtlSelPayAsset').value = dstEvntDtl.pay_ASSET;
+	document.getElementById('dtlSelRcvAsset').value = dstEvntDtl.rcv_ASSET;
+	document.getElementById('dtlTxtAmt').value = dstEvntDtl.amt;
+	document.getElementById('dtlSelEvntTycd').value = dstEvntDtl.evnt_TYCD
+	document.getElementById('dtlTxtFirm').value = dstEvntDtl.firm;
+	document.getElementById('dtlTxtDtl').value = dstEvntDtl.dtl;
+}
+
+
+
 /*
  * 조회버튼 클릭
  */
@@ -209,11 +305,11 @@ function set_grdEvntList()
 		dstEvntLst.forEach(function(e, i) 
 		{ 
 		
-			if(e.evnt_NM == "지출")
+			if(e.chk_YN != "D" && e.evnt_NM == "지출")
 			{
 				nTotalPayAmt += e.amt;
 			}
-			else if(e.evnt_NM == "수입")
+			else if(e.chk_YN != "D" && e.evnt_NM == "수입")
 			{
 				nTotalRcvAmt += e.amt;
 			}
@@ -221,6 +317,17 @@ function set_grdEvntList()
 			if(e.chk_YN == "N")
 			{
 				dstEvntLst[i] = `<div class="item" style="border: 2px solid #eee; background-color: yellow;" onclick="onClick_grdRow('${e.evnt_NO}')">
+									<div class="cell">${e.wk_DT}</div>
+									<div class="cell">${e.evnt_NM}</div>
+									<div class="cell">${e.evnt_TYCD}</div>
+									<div class="cell">${e.pay_ASSET}</div>
+									<div class="cell">${e.rcv_ASSET}</div>
+									<div class="cell" style="text-align: right;">${gfnSetComma(e.amt)} 원</div>
+							   </div>`;
+			}
+			else if(e.chk_YN == "D")
+			{
+				dstEvntLst[i] = `<div class="item" style="border: 2px solid #eee; background-color: red;" onclick="onClick_grdRow('${e.evnt_NO}')">
 									<div class="cell">${e.wk_DT}</div>
 									<div class="cell">${e.evnt_NM}</div>
 									<div class="cell">${e.evnt_TYCD}</div>
@@ -483,9 +590,9 @@ function onchange_chkAll(){
 
 
 /*
- * 신규입력
+ * 자산변동 기록
  */
-function upd_evntAsset(sParam){
+function rec_evntAsset(sParam){
 	
 	var sWkDt = document.getElementById('dtlTxtWkDt').value;
 	var sEvnt = document.getElementById('dtlSelEvnt').value;
@@ -507,15 +614,31 @@ function upd_evntAsset(sParam){
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.send("WK_DT="+sWkDt
-			+"&EVNT="+sEvnt
-			+"&PAY_ASSET="+sPayAsset
-			+"&RCV_ASSET="+sRcvAsset
-			+"&AMT="+nAmt
-			+"&EVNT_TYCD="+sEvntTycd
-			+"&FIRM="+sFirm
-			+"&DTL="+sDtl
-			);
+	if(sParam == "ins"){
+		xhr.send("WK_DT="+sWkDt
+				+"&EVNT="+sEvnt
+				+"&PAY_ASSET="+sPayAsset
+				+"&RCV_ASSET="+sRcvAsset
+				+"&AMT="+nAmt
+				+"&EVNT_TYCD="+sEvntTycd
+				+"&FIRM="+sFirm
+				+"&DTL="+sDtl
+				);
+	}
+	else{
+		xhr.send("EVNT_NO="+dstEvntDtl.evnt_NO
+				+"&WK_DT="+sWkDt
+				+"&EVNT="+sEvnt
+				+"&PAY_ASSET="+sPayAsset
+				+"&RCV_ASSET="+sRcvAsset
+				+"&AMT="+nAmt
+				+"&EVNT_TYCD="+sEvntTycd
+				+"&FIRM="+sFirm
+				+"&DTL="+sDtl
+				+"&CHK_YN="+dstEvntDtl.chk_YN
+				);
+	}
+			
 	
 	xhr.onload = function () {
 	  // xhr 객체의 status 값을 검사한다.

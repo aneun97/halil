@@ -22,7 +22,7 @@ SELECT A.ASSET
      , D.DEC_AMT AS AFT_DEC_AMT
      , D.AMT AS AFT_AMT
      , DATE_FORMAT(D.BEF_DT, '%Y%m%d') AS AFT_BEF_DT
-     , #{WK_DT}	AS WK_DT
+     , DATE_FORMAT(#{WK_DT}, '%Y%m%d') AS WK_DT
      , #{AMT}	AS AMT
   FROM info_asset A
   LEFT JOIN info_asset_kind B

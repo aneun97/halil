@@ -6,16 +6,22 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FixAssetEvntJob {
+public class EvntAssetChkJob {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	// 초 분 시 일 월 요일
 	@Scheduled(cron = "0 0 0 * * ?")
-	public void tset() {
+	public void EvntAssetChk() {
 		logger.info("스케쥴러 작동");
 		
 		// 오늘 이전 chk_yn이 n 상태인 경우 d로 변경
+		// 1. 조회 2. 변경
+		
 		// d로 변경할때 원장도 다 변경
+		
+		
+		
+		
 		
 		// + 이벤트내역에서 체크상태 변경할수있도록
 		// 이벤트내역 수정/삭제 하면 원장도 변경 - 수정은 금액, 입출금처 변경, 기타내역변경 가능// 이벤트종류 변경 불가
