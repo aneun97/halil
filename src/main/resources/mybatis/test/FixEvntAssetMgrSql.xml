@@ -7,7 +7,7 @@
 SELECT A.FIX_EVNT_NO
      , B.KR_NM AS EVNT_NM
      , A.AMT
-     , NVL(C.KR_NM, '-') EVNT_TYCD
+     , NVL(C.KR_NM, '-') EVNT_HCLS
      , NVL(D.KR_NM, '-') PAY_ASSET
      , NVL(E.KR_NM, '-') RCV_ASSET
      , A.FROM_DT
@@ -16,14 +16,14 @@ SELECT A.FIX_EVNT_NO
   LEFT JOIN info_evnt			B
     ON A.EVNT = B.EVNT
   LEFT JOIN info_evnt_hcls		C
-    ON A.EVNT_TYCD = C.EVNT_HCLS
+    ON A.EVNT_HCLS = C.EVNT_HCLS
   LEFT JOIN info_asset			D
     ON A.PAY_ASSET = D.ASSET
   LEFT JOIN info_asset			E
     ON A.RCV_ASSET = E.ASSET
  WHERE 1 = 1
-   <if test="EVNT_TYCD !=null and EVNT_TYCD !=''">
-   AND A.EVNT_TYCD = #{EVNT_TYCD}
+   <if test="EVNT_HCLS !=null and EVNT_HCLS !=''">
+   AND A.EVNT_HCLS = #{EVNT_HCLS}
    </if>
 </select> 
 
@@ -39,7 +39,7 @@ INSERT INTO fix_evnt_asset
 		  , PAY_ASSET
 		  , RCV_ASSET
 		  , AMT
-		  , EVNT_TYCD
+		  , EVNT_HCLS
 		  , FIRM
 		  , DTL
 		  , EVNT_PER
@@ -56,7 +56,7 @@ VALUES
 		  , #{PAY_ASSET}
 		  , #{RCV_ASSET}
 		  , #{AMT}
-		  , #{EVNT_TYCD}
+		  , #{EVNT_HCLS}
 		  , #{FIRM}
 		  , #{DTL}
 		  , #{EVNT_PER}
@@ -84,7 +84,7 @@ INSERT INTO evnt_asset
 		  , PAY_ASSET
 		  , RCV_ASSET
 		  , AMT
-		  , EVNT_TYCD
+		  , EVNT_HCLS
 		  , FIRM
 		  , DTL
 		  , FIX_EVNT_NO
@@ -98,7 +98,7 @@ VALUES
 		  , #{PAY_ASSET}
 		  , #{RCV_ASSET}
 		  , #{AMT}
-		  , #{EVNT_TYCD}
+		  , #{EVNT_HCLS}
 		  , #{FIRM}
 		  , #{DTL}
 		  , #{FIX_EVNT_NO}

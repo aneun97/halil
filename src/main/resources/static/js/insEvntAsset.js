@@ -180,7 +180,7 @@ function fnSetAsset(){
 
 function fnSetEvntHcls(){
 	
-	var targetSel = document.getElementById('EVNT_TYCD')
+	var targetSel = document.getElementById('EVNT_HCLS')
 
 	resParse3.forEach(function(e) {
 		var opt = document.createElement('option')
@@ -264,7 +264,7 @@ function test(){
 	var sPayAsset = document.getElementById('PAY_ASSET').value;
 	var sRcvAsset = document.getElementById('RCV_ASSET').value;
 	var nAmt = document.getElementById('AMT').value;
-	var sEvntTycd = document.getElementById('EVNT_TYCD').value;
+	var sEvntTycd = document.getElementById('EVNT_HCLS').value;
 	var sFirm = document.getElementById('FIRM').value;
 	var sDtl = document.getElementById('DTL').value;
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
@@ -284,7 +284,7 @@ function test(){
 			+"&PAY_ASSET="+sPayAsset
 			+"&RCV_ASSET="+sRcvAsset
 			+"&AMT="+nAmt
-			+"&EVNT_TYCD="+sEvntTycd
+			+"&EVNT_HCLS="+sEvntTycd
 			+"&FIRM="+sFirm
 			+"&DTL="+sDtl
 			);
@@ -310,7 +310,7 @@ function fnSetInit(){
 	document.getElementById('PAY_ASSET').value = '';
 	document.getElementById('RCV_ASSET').value = '';
 	document.getElementById('AMT').value = null;
-	document.getElementById('EVNT_TYCD').value = '';
+	document.getElementById('EVNT_HCLS').value = '';
 	document.getElementById('FIRM').value = null;
 	document.getElementById('DTL').value = null;
 }

@@ -120,7 +120,7 @@ public class FixEvntAssetMgrSvc {
 		assetEvntVo.setPAY_ASSET(fixEvntAssetMgrVo.getPAY_ASSET());
 		assetEvntVo.setRCV_ASSET(fixEvntAssetMgrVo.getRCV_ASSET());
 		assetEvntVo.setAMT(fixEvntAssetMgrVo.getAMT());
-		assetEvntVo.setEVNT_TYCD(fixEvntAssetMgrVo.getEVNT_TYCD());
+		assetEvntVo.setEVNT_HCLS(fixEvntAssetMgrVo.getEVNT_HCLS());
 		assetEvntVo.setFIRM(fixEvntAssetMgrVo.getFIRM());
 		assetEvntVo.setDTL(fixEvntAssetMgrVo.getDTL());
 		assetEvntVo.setFIX_EVNT_NO(fixEvntAssetMgrVo.getFIX_EVNT_NO());

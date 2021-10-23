@@ -26,7 +26,11 @@ public class SyCommonSelSvc {
 		return syCommonSelDao.lstAssetKind();
 	}
 
-	public List<SyCommonSelVo> lstEvntTycd(){
-		return syCommonSelDao.lstEvntTycd();
+	public List<SyCommonSelVo> lstEvntHcls(){
+		return syCommonSelDao.lstEvntHcls();
+	}
+
+	public List<SyCommonSelVo> lstEvntLcls(SyCommonSelVo syCommonSelVo){
+		return syCommonSelDao.lstEvntLcls(syCommonSelVo);
 	}
 }

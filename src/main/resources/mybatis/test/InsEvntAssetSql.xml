@@ -122,7 +122,7 @@ INSERT INTO evnt_asset
 		  , PAY_ASSET
 		  , RCV_ASSET
 		  , AMT
-		  , EVNT_TYCD
+		  , EVNT_HCLS
 		  , FIRM
 		  , DTL
 		  , CHK_YN
@@ -135,7 +135,7 @@ VALUES
 		  , #{PAY_ASSET}
 		  , #{RCV_ASSET}
 		  , #{AMT}
-		  , #{EVNT_TYCD}
+		  , #{EVNT_HCLS}
 		  , #{FIRM}
 		  , #{DTL}
 		  , 'Y'

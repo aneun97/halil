@@ -1,23 +1,58 @@
 package com.example.demo.job;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+
+import com.example.demo.test.biz.MastAssetBiz;
+import com.example.demo.test.dao.EvntAssetSelDao;
+import com.example.demo.test.vo.EvntAssetSelVo;
+import com.example.demo.test.vo.MastAssetVo;
 
 @Component
 public class EvntAssetChkJob {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	public EvntAssetSelDao evntAssetSelDao;
+
+	@Autowired
+	public MastAssetBiz mastAssetBiz;
 	// 초 분 시 일 월 요일
 	@Scheduled(cron = "0 0 0 * * ?")
-	public void EvntAssetChk() {
+	public void EvntAssetChk() throws Exception {
 		logger.info("스케쥴러 작동");
 		
 		// 오늘 이전 chk_yn이 n 상태인 경우 d로 변경
-		// 1. 조회 2. 변경
-		
-		// d로 변경할때 원장도 다 변경
+		// 1. 조회 
+		EvntAssetSelVo condVo = new EvntAssetSelVo();
+		List<EvntAssetSelVo> evntAssetSelVoLs = evntAssetSelDao.lstUnChk(condVo);
+		// 2. 변경 및 원장수정
+		MastAssetVo mastAssetVo = new MastAssetVo();
+		for (EvntAssetSelVo evntAssetVo : evntAssetSelVoLs) {
+			evntAssetVo.setCHK_YN("D");
+			evntAssetSelDao.upd(evntAssetVo);
+			
+			mastAssetVo.setWK_DT(evntAssetVo.getWK_DT());
+			mastAssetVo.setAMT(evntAssetVo.getAMT());
+			// 출금처가 있으면 출금처 원장 수정
+			if (!ObjectUtils.isEmpty(evntAssetVo.getPAY_ASSET())) {
+				mastAssetVo.setASSET(evntAssetVo.getPAY_ASSET());			
+				mastAssetBiz.rbkMastAsset(mastAssetVo, true);
+			}
+			// 입금처가 있으면 입금처 원장 수정
+			if (!ObjectUtils.isEmpty(evntAssetVo.getRCV_ASSET())) {
+				mastAssetVo.setASSET(evntAssetVo.getRCV_ASSET());			
+				mastAssetBiz.rbkMastAsset(mastAssetVo, false);
+			}		
+			
+		}
 		
 		
 		

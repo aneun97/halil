@@ -14,7 +14,7 @@ public class FixEvntAssetMgrVo {
 	private String PAY_ASSET;
 	private String RCV_ASSET;
 	private BigDecimal AMT = new BigDecimal(0);
-	private String EVNT_TYCD;
+	private String EVNT_HCLS;
 	private String FIRM;
 	private String DTL;
 	private String EVNT_PER;
@@ -63,11 +63,11 @@ public class FixEvntAssetMgrVo {
 	public void setAMT(BigDecimal aMT) {
 		AMT = aMT;
 	}
-	public String getEVNT_TYCD() {
-		return EVNT_TYCD;
+	public String getEVNT_HCLS() {
+		return EVNT_HCLS;
 	}
-	public void setEVNT_TYCD(String eVNT_TYCD) {
-		EVNT_TYCD = eVNT_TYCD;
+	public void setEVNT_HCLS(String eVNT_HCLS) {
+		EVNT_HCLS = eVNT_HCLS;
 	}
 	public String getFIRM() {
 		return FIRM;

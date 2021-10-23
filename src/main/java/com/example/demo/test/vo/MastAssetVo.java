@@ -16,7 +16,7 @@ public class MastAssetVo {
 	private String PAY_ASSET;
 	private String RCV_ASSET;
 	private BigDecimal AMT = new BigDecimal(0);
-	private String EVNT_TYCD;
+	private String EVNT_HCLS;
 	private String FIRM;
 	private String DTL;
 	private String PAY_STG;
@@ -54,9 +54,6 @@ public class MastAssetVo {
 	//INFO_EVNT 테이블
 	private String PAY_TYCD;
 	private String RCV_TYCD;
-
-	//INFO_EVNT_HCLS 테이블
-	private String EVNT_HCLS;
 	
 	public String getWK_DT() {
 		return WK_DT;
@@ -99,12 +96,6 @@ public class MastAssetVo {
 	}
 	public void setAMT(BigDecimal aMT) {
 		AMT = aMT;
-	}
-	public String getEVNT_TYCD() {
-		return EVNT_TYCD;
-	}
-	public void setEVNT_TYCD(String eVNT_TYCD) {
-		EVNT_TYCD = eVNT_TYCD;
 	}
 	public String getFIRM() {
 		return FIRM;

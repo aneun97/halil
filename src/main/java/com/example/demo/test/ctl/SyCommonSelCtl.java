@@ -33,10 +33,15 @@ public class SyCommonSelCtl {
 		List<SyCommonSelVo> assetLs = syCommonSelSvc.lstAssetKind();
 		return assetLs;
 	}
-	@RequestMapping("/lstEvntTycd")
-	public List<SyCommonSelVo> lstEvntTycd(HttpServletRequest req) {
-		List<SyCommonSelVo> evntHclsLs = syCommonSelSvc.lstEvntTycd();
+	@RequestMapping("/lstEvntHcls")
+	public List<SyCommonSelVo> lstEvntHcls(HttpServletRequest req) {
+		List<SyCommonSelVo> evntHclsLs = syCommonSelSvc.lstEvntHcls();
 		return evntHclsLs;
+	}	
+	@RequestMapping("/lstEvntLcls")
+	public List<SyCommonSelVo> lstEvntLcls(SyCommonSelVo syCommonSelVo) {
+		List<SyCommonSelVo> evntLclsLs = syCommonSelSvc.lstEvntLcls(syCommonSelVo);
+		return evntLclsLs;
 	}	
 
 }

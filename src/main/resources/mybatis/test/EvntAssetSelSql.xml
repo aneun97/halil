@@ -8,7 +8,7 @@ SELECT A.EVNT_NO
 	 , A.WK_DT
      , B.KR_NM EVNT_NM
      , A.AMT
-     , NVL(C.KR_NM, '-') EVNT_TYCD
+     , NVL(C.KR_NM, '-') EVNT_HCLS
      , NVL(D.KR_NM, '-') PAY_ASSET
      , NVL(E.KR_NM, '-') RCV_ASSET
      , A.CHK_YN
@@ -16,7 +16,7 @@ SELECT A.EVNT_NO
   LEFT JOIN info_evnt			B
     ON A.EVNT = B.EVNT
   LEFT JOIN info_evnt_hcls		C
-    ON A.EVNT_TYCD = C.EVNT_HCLS
+    ON A.EVNT_HCLS = C.EVNT_HCLS
   LEFT JOIN info_asset			D
     ON A.PAY_ASSET = D.ASSET
   LEFT JOIN info_asset			E
@@ -54,8 +54,8 @@ SELECT A.EVNT_NO
    					   )
    		)
    </if>
-   <if test="EVNT_TYCD !=null and EVNT_TYCD !=''">
-   AND A.EVNT_TYCD = #{EVNT_TYCD}
+   <if test="EVNT_HCLS !=null and EVNT_HCLS !=''">
+   AND A.EVNT_HCLS = #{EVNT_HCLS}
    </if>
  ORDER BY WK_DT DESC
 </select> 
@@ -68,14 +68,14 @@ SELECT A.WK_DT
 	 , A.PAY_ASSET
 	 , A.RCV_ASSET
 	 , A.AMT
-	 , A.EVNT_TYCD
+	 , A.EVNT_HCLS
 	 , A.FIRM
 	 , A.DTL
 	 , A.FIX_EVNT_NO
 	 , A.CHK_YN
   FROM evnt_asset				A
  WHERE 1 = 1
-   AND WK_DT <![CDATA[<]]> #{WK_DT}
+   AND A.WK_DT <![CDATA[<]]> SYSDATE()
    AND A.CHK_YN = 'N'
 </select>
 
@@ -87,7 +87,8 @@ SELECT A.WK_DT
 	 , A.PAY_ASSET
 	 , A.RCV_ASSET
 	 , A.AMT
-	 , A.EVNT_TYCD
+	 , A.EVNT_HCLS
+	 , A.EVNT_LCLS
 	 , A.FIRM
 	 , A.DTL
 	 , A.FIX_EVNT_NO
@@ -113,7 +114,8 @@ INSERT INTO evnt_asset
 		  , PAY_ASSET
 		  , RCV_ASSET
 		  , AMT
-		  , EVNT_TYCD
+		  , EVNT_HCLS
+		  , EVNT_LCLS
 		  , FIRM
 		  , DTL
 		  , CHK_YN
@@ -126,7 +128,8 @@ VALUES
 		  , #{PAY_ASSET}
 		  , #{RCV_ASSET}
 		  , #{AMT}
-		  , #{EVNT_TYCD}
+		  , #{EVNT_HCLS}
+		  , #{EVNT_LCLS}
 		  , #{FIRM}
 		  , #{DTL}
 		  , #{CHK_YN}
@@ -142,7 +145,7 @@ UPDATE evnt_asset
      , PAY_ASSET = #{PAY_ASSET}
      , RCV_ASSET = #{RCV_ASSET}
      , AMT = #{AMT}
-     , EVNT_TYCD = #{EVNT_TYCD}
+     , EVNT_HCLS = #{EVNT_HCLS}
      , FIRM = #{FIRM}
      , DTL = #{DTL}
  WHERE EVNT_NO = #{EVNT_NO}

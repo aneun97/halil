@@ -21,6 +21,9 @@ public class SyCommonSelVo {
 	//info_evnt_hcls
 	private String EVNT_HCLS;
 	
+	//info_evnt_lcls
+	private String EVNT_LCLS;
+	
 
 	public String getEVNT() {
 		return EVNT;
@@ -108,6 +111,14 @@ public class SyCommonSelVo {
 
 	public void setTO_DT(String tO_DT) {
 		TO_DT = tO_DT;
+	}
+
+	public String getEVNT_LCLS() {
+		return EVNT_LCLS;
+	}
+
+	public void setEVNT_LCLS(String eVNT_LCLS) {
+		EVNT_LCLS = eVNT_LCLS;
 	}
 	
 	

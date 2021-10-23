@@ -6,7 +6,7 @@ var dstFixEvntAssetLst;
 
 var dstAsset;
 var dstEvnt;
-var dstEvntTycd;
+var dstEvntHcls;
 var IOmode;
 
 fixEvntAssetMgr_init();
@@ -21,7 +21,7 @@ function fixEvntAssetMgr_init(){
 	IOmode = 'S';
 	set_dstAsset();
 	set_dstEvnt();
-	set_dstEvntTycd();
+	set_dstEvntHcls();
 }
 
 
@@ -129,7 +129,7 @@ function set_divDtl_init(){
 	document.getElementById('dtlSelPayAsset').value = '';
 	document.getElementById('dtlSelrcvAsset').value = '';
 	document.getElementById('dtlTxtAmt').value = null;
-	document.getElementById('dtlSelEvntTycd').value = '';
+	document.getElementById('dtlSelEvntHcls').value = '';
 	document.getElementById('dtlTxtFirm').value = null;
 	document.getElementById('dtlTxtDtl').value = null;
 	document.getElementById('dtlTxtEvntPer').value = null;
@@ -152,7 +152,7 @@ function set_grdFixEvntAssetLst()
 									<div class="cell">${e.from_DT}</div>
 									<div class="cell">${e.to_DT}</div>
 									<div class="cell">${e.evnt_NM}</div>
-									<div class="cell">${e.evnt_TYCD}</div>
+									<div class="cell">${e.evnt_HCLS}</div>
 									<div class="cell">${e.pay_ASSET}</div>
 									<div class="cell">${e.rcv_ASSET}</div>
 									<div class="cell" style="text-align: right;">${gfnSetComma(e.amt)} 원</div>
@@ -236,13 +236,13 @@ function set_dstEvnt(){
 /*
  * 이벤트타입 데이터셋 세팅
  */
-function set_dstEvntTycd(){
+function set_dstEvntHcls(){
 		
 	// XMLHttpRequest 객체의 인스턴스를 생성합니다.
 	var xhr = new XMLHttpRequest();
 	
 	// open() 메서드는 요청을 준비하는 메서드입니다. (http 메서드, 데이터를 받아올 URL 경로, 비동기 여부)
-	xhr.open("POST", "/syCommonsel/lstEvntTycd", true);
+	xhr.open("POST", "/syCommonsel/lstEvntHcls", true);
 	
 	// send() 메서드는 준비된 요청을 서버로 전송하는 메서드입니다. (서버에 전달될 정보)
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -254,10 +254,10 @@ function set_dstEvntTycd(){
 	    // 서버로 부터 받은 데이터를 처리할 코드
 		var resText = xhr.responseText;
 		
-		dstEvntTycd = JSON.parse(resText);
+		dstEvntHcls = JSON.parse(resText);
 		
-		var pcSel = document.getElementById('dtlSelEvntTycd');	
-		set_selEvntTycd(pcSel);
+		var pcSel = document.getElementById('dtlSelEvntHcls');	
+		set_selEvntHcls(pcSel);
 	  }
 	}
 }
@@ -302,9 +302,9 @@ function set_selEvnt(pcSel){
 /*
  * 이벤트타입 셀렉트박스 세팅
  */
-function set_selEvntTycd(pcSel){
+function set_selEvntHcls(pcSel){
 	
-	dstEvntTycd.forEach(function(e) {
+	dstEvntHcls.forEach(function(e) {
 		var opt = document.createElement('option');
 		opt.setAttribute('value', e.evnt_HCLS);
 		opt.innerText = e.kr_NM;
@@ -328,7 +328,7 @@ function upd_fixEvntAsset(sParam){
 	var sPayAsset = document.getElementById('dtlSelPayAsset').value;
 	var sRcvAsset = document.getElementById('dtlSelrcvAsset').value;
 	var nAmt = document.getElementById('dtlTxtAmt').value;
-	var sEvntTycd = document.getElementById('dtlSelEvntTycd').value;
+	var sEvntHcls = document.getElementById('dtlSelEvntHcls').value;
 	var sFirm = document.getElementById('dtlTxtFirm').value;
 	var sDtl = document.getElementById('dtlTxtDtl').value;
 	var sEvntPer = document.getElementById('dtlTxtEvntPer').value;
@@ -348,7 +348,7 @@ function upd_fixEvntAsset(sParam){
 			+"&PAY_ASSET="+sPayAsset
 			+"&RCV_ASSET="+sRcvAsset
 			+"&AMT="+nAmt
-			+"&EVNT_TYCD="+sEvntTycd
+			+"&EVNT_HCLS="+sEvntHcls
 			+"&FIRM="+sFirm
 			+"&DTL="+sDtl
 			+"&EVNT_PER="+sEvntPer

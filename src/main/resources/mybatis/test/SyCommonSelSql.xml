@@ -3,6 +3,7 @@
 
 <mapper namespace="com.example.demo.test.dao.SyCommonSelDao"> 
 <select id="lstEvnt" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+/* com.example.demo.test.dao.SyCommonSelDao.lstEvnt */
 SELECT EVNT
      , KR_NM
      , RCV_TYCD
@@ -10,6 +11,7 @@ SELECT EVNT
   FROM info_evnt
 </select> 
 <select id="lstAsset" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+/* com.example.demo.test.dao.SyCommonSelDao.lstAsset */
 SELECT ASSET
      , KR_NM
      , ASSET_KIND
@@ -25,15 +27,28 @@ SELECT ASSET
  ORDER BY SORT_NO
 </select> 
 <select id="lstAssetKind" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+/* com.example.demo.test.dao.SyCommonSelDao.lstAssetKind */
 SELECT ASSET_KIND
      , KR_NM
      , PAY_YN
   FROM info_asset_kind
 </select> 
-<select id="lstEvntTycd" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+<select id="lstEvntHcls" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+/* com.example.demo.test.dao.SyCommonSelDao.lstEvntHcls */
 SELECT EVNT
      , EVNT_HCLS
      , KR_NM
   FROM info_evnt_hcls
+</select> 
+<select id="lstEvntLcls" parameterType="SyCommonSelVo" resultType="SyCommonSelVo">
+/* com.example.demo.test.dao.SyCommonSelDao.lstEvntLcls */
+SELECT EVNT_HCLS
+     , EVNT_LCLS
+     , KR_NM
+  FROM info_evnt_lcls
+ WHERE 1=1
+   <if test="EVNT_HCLS !=null and EVNT_HCLS !=''">
+   AND EVNT_HCLS = #{EVNT_HCLS}
+   </if>
 </select> 
 </mapper>

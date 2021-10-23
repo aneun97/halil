@@ -13,5 +13,6 @@ public interface SyCommonSelDao {
 	List<SyCommonSelVo> lstEvnt();
 	List<SyCommonSelVo> lstAsset(SyCommonSelVo syCommonSelVo);
 	List<SyCommonSelVo> lstAssetKind();
-	List<SyCommonSelVo> lstEvntTycd();
+	List<SyCommonSelVo> lstEvntHcls();
+	List<SyCommonSelVo> lstEvntLcls(SyCommonSelVo syCommonSelVo);
 }

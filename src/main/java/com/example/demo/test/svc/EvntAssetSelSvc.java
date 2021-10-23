@@ -71,6 +71,11 @@ public class EvntAssetSelSvc {
 			throw new Exception("이벤트는 변경 불가");
 		}
 		
+		// 미확인, 딜레이건이 변경된다면 확인처리
+		if (oldVo.getCHK_YN().equals("D") || oldVo.getCHK_YN().equals("N")) {
+			evntAssetSelVo.setCHK_YN("Y");
+		}
+		
 		// 업데이트
 		evntAssetSelDao.upd(evntAssetSelVo);
 		
@@ -78,6 +83,16 @@ public class EvntAssetSelSvc {
 		if (!ObjectUtils.isEmpty(evntAssetSelVo.getRCV_ASSET())){
 			// 입금처 원장 VO
 			MastAssetVo rcvAssettVo = new MastAssetVo();
+
+
+			// 원장이 없는 경우 생성
+			if (oldVo.getCHK_YN().equals("D")) {
+				// 2.신규 입금처 원장 변경
+				rcvAssettVo.setWK_DT(oldVo.getWK_DT());
+				rcvAssettVo.setASSET(oldVo.getRCV_ASSET());
+				rcvAssettVo.setAMT(oldVo.getAMT());				
+				mastAssetBiz.recMastAsset(rcvAssettVo, false, false);
+			}
 			
 			// 입금처 변경된 경우
 			if (!evntAssetSelVo.getRCV_ASSET().equals(oldVo.getRCV_ASSET())) {
@@ -126,6 +141,16 @@ public class EvntAssetSelSvc {
 		if (!ObjectUtils.isEmpty(evntAssetSelVo.getPAY_ASSET())){
 			// 출금처 원장 VO
 			MastAssetVo payAssettVo = new MastAssetVo();
+			
+			// 원장이 없는 경우 생성
+			if (oldVo.getCHK_YN().equals("D")) {
+				// 2.신규 입금처 원장 변경
+				payAssettVo.setWK_DT(oldVo.getWK_DT());
+				payAssettVo.setASSET(oldVo.getPAY_ASSET());
+				payAssettVo.setAMT(oldVo.getAMT());				
+				mastAssetBiz.recMastAsset(payAssettVo, true, false);
+			}
+			
 			// 출금처 변경된 경우
 			if (!evntAssetSelVo.getPAY_ASSET().equals(oldVo.getPAY_ASSET())) {
 				// 1.기존 출금처 원장 원상복구				
@@ -169,31 +194,39 @@ public class EvntAssetSelSvc {
 
 	// 이벤트 삭제(논리적)
 	public void del(EvntAssetSelVo evntAssetSelVo) throws Exception {
+
+		// 업데이트 전 정보확인
+		EvntAssetSelVo oldVo = new EvntAssetSelVo();
+		oldVo = evntAssetSelDao.viw(evntAssetSelVo);
 		
 		// 확인여부를 취소로 변경
 		evntAssetSelDao.del(evntAssetSelVo);
+
+		// 이미 원장이 없는 경우가 아니면
+		if (!oldVo.getCHK_YN().equals("D") && !oldVo.getCHK_YN().equals("R")) {
+			// 입금처가 있으면 입금처 원장원복
+			if (!ObjectUtils.isEmpty(evntAssetSelVo.getRCV_ASSET())){
+				// 입금처 원장 VO
+				MastAssetVo rcvAssettVo = new MastAssetVo();
+				
+				rcvAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
+				rcvAssettVo.setASSET(evntAssetSelVo.getRCV_ASSET());
+				rcvAssettVo.setAMT(evntAssetSelVo.getAMT());
+				
+				mastAssetBiz.rbkMastAsset(rcvAssettVo, false);			
+			}
+			// 출금처가 있으면 출금처 원장원복
+			if (!ObjectUtils.isEmpty(evntAssetSelVo.getPAY_ASSET())){
+				// 출금처 원장 VO
+				MastAssetVo payAssettVo = new MastAssetVo();
+				
+				payAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
+				payAssettVo.setASSET(evntAssetSelVo.getPAY_ASSET());
+				payAssettVo.setAMT(evntAssetSelVo.getAMT());
+				
+				mastAssetBiz.rbkMastAsset(payAssettVo, true);			
+			}
+		}
 		
-		// 입금처가 있으면 입금처 원장원복
-		if (!ObjectUtils.isEmpty(evntAssetSelVo.getRCV_ASSET())){
-			// 입금처 원장 VO
-			MastAssetVo rcvAssettVo = new MastAssetVo();
-			
-			rcvAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
-			rcvAssettVo.setASSET(evntAssetSelVo.getRCV_ASSET());
-			rcvAssettVo.setAMT(evntAssetSelVo.getAMT());
-			
-			mastAssetBiz.rbkMastAsset(rcvAssettVo, false);			
-		}
-		// 출금처가 있으면 출금처 원장원복
-		if (!ObjectUtils.isEmpty(evntAssetSelVo.getPAY_ASSET())){
-			// 출금처 원장 VO
-			MastAssetVo payAssettVo = new MastAssetVo();
-			
-			payAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
-			payAssettVo.setASSET(evntAssetSelVo.getPAY_ASSET());
-			payAssettVo.setAMT(evntAssetSelVo.getAMT());
-			
-			mastAssetBiz.rbkMastAsset(payAssettVo, true);			
-		}
 	}
 }
