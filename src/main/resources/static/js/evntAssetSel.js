@@ -386,7 +386,6 @@ function set_grdEvntList()
 
 
 
-
 /*
  * 자산 데이터셋 세팅
  */
