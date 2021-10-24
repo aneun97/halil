@@ -146,6 +146,7 @@ UPDATE evnt_asset
      , RCV_ASSET = #{RCV_ASSET}
      , AMT = #{AMT}
      , EVNT_HCLS = #{EVNT_HCLS}
+     , EVNT_LCLS = #{EVNT_LCLS}
      , FIRM = #{FIRM}
      , DTL = #{DTL}
  WHERE EVNT_NO = #{EVNT_NO}

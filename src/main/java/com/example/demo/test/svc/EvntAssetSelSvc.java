@@ -84,7 +84,6 @@ public class EvntAssetSelSvc {
 			// 입금처 원장 VO
 			MastAssetVo rcvAssettVo = new MastAssetVo();
 
-
 			// 원장이 없는 경우 생성
 			if (oldVo.getCHK_YN().equals("D")) {
 				// 2.신규 입금처 원장 변경
@@ -125,7 +124,7 @@ public class EvntAssetSelSvc {
 				}
 				
 				// 금액 변경된 경우
-				if (evntAssetSelVo.getAMT() != oldVo.getAMT()) {
+				if (evntAssetSelVo.getAMT().compareTo(oldVo.getAMT()) != 0) {
 					// 발생일 원장에서 증가액, 현금액 조정
 					// 발생일 이후 원장에서 전금액, 현금액 조정
 					rcvAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
@@ -141,7 +140,7 @@ public class EvntAssetSelSvc {
 		if (!ObjectUtils.isEmpty(evntAssetSelVo.getPAY_ASSET())){
 			// 출금처 원장 VO
 			MastAssetVo payAssettVo = new MastAssetVo();
-			
+
 			// 원장이 없는 경우 생성
 			if (oldVo.getCHK_YN().equals("D")) {
 				// 2.신규 입금처 원장 변경
@@ -180,11 +179,11 @@ public class EvntAssetSelSvc {
 				}
 				
 				// 금액 변경된 경우
-				if (evntAssetSelVo.getAMT() != oldVo.getAMT()) {
+				if (evntAssetSelVo.getAMT().compareTo(oldVo.getAMT()) != 0) {
 					// 발생일 원장에서 증가액, 현금액 조정
 					// 발생일 이후 원장에서 전금액, 현금액 조정
 					payAssettVo.setWK_DT(evntAssetSelVo.getWK_DT());
-					payAssettVo.setASSET(evntAssetSelVo.getRCV_ASSET());
+					payAssettVo.setASSET(evntAssetSelVo.getPAY_ASSET());
 					payAssettVo.setAMT(evntAssetSelVo.getAMT().subtract(oldVo.getAMT()));				
 					mastAssetBiz.recMastAsset(payAssettVo, true, false);
 				}

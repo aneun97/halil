@@ -3,6 +3,7 @@
 
 <mapper namespace="com.example.demo.test.dao.MastAssetDao">
 <select id="viwMastAsset" parameterType="MastAssetVo" resultType="MastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.viwMastAsset */
 SELECT A.ASSET
      , A.KR_NM
      , B.DC_TYCD
@@ -83,6 +84,7 @@ SELECT A.ASSET
 </select> 
 
 <insert id="insMastAsset" parameterType="mastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.insMastAsset */
 INSERT INTO mast_asset
 		(
 			WK_DT
@@ -106,6 +108,7 @@ VALUES
 </insert>
 
 <update id="updMastAsset" parameterType="mastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.updMastAsset */
 UPDATE mast_asset
    SET INC_AMT = #{INC_AMT}
      , DEC_AMT = #{DEC_AMT}
@@ -115,6 +118,7 @@ UPDATE mast_asset
 </update>
 
 <update id="updMastAssetAft" parameterType="MastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.updMastAssetAft */
 UPDATE mast_asset
    SET BEF_DT = #{BEF_DT}
  WHERE WK_DT = #{WK_DT}
@@ -122,6 +126,7 @@ UPDATE mast_asset
 </update>
 
 <update id="updDecAssetAft" parameterType="MastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.updDecAssetAft */
 UPDATE mast_asset
    SET BEF_AMT 	= BEF_AMT 	- #{AMT}
      , AMT 		= AMT 		- #{AMT}
@@ -130,6 +135,7 @@ UPDATE mast_asset
 </update>
 
 <update id="updIncAssetAft" parameterType="MastAssetVo">
+/* com.example.demo.test.dao.MastAssetDao.updIncAssetAft */
 UPDATE mast_asset
    SET BEF_AMT 	= BEF_AMT 	+ #{AMT}
      , AMT 		= AMT 		+ #{AMT}
