@@ -3,6 +3,7 @@
 
 <mapper namespace="com.example.demo.test.dao.AssetAmtSelDao"> 
 <select id="viwTotal" resultType="AssetAmtSelVo">
+/* com.example.demo.test.dao.AssetAmtSelDao.viwTotal */
 SELECT DEBIT
      , CREDIT
      , (DEBIT - CREDIT) 	NET_DEBIT
@@ -89,9 +90,11 @@ SELECT DEBIT
 				) D	 
 		 GROUP BY D.ASSET						 
 		) ASSET_LIST
+ WHERE ASSET_LIST.AMT <![CDATA[>]]> 0
  ORDER BY SORT_NO
 </select> 
 <insert id="ins" parameterType="AssetAmtSelVo">
+/* com.example.demo.test.dao.AssetAmtSelDao.ins */
 <selectKey keyProperty="ASSET,SORT_NO" resultType="AssetAmtSelVo" order="BEFORE">
 SELECT CONCAT('A', LPAD(NVL(MAX(SUBSTR(ASSET,2,5)),0)+1,5,'0')) ASSET
      , NVL(MAX(SORT_NO),0)+1 SORT_NO

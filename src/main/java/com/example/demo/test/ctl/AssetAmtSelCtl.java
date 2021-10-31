@@ -19,7 +19,7 @@ public class AssetAmtSelCtl {
 	@Autowired
 	AssetAmtSelSvc assetAmtSelSvc;
 	
-	@RequestMapping("/init")
+	@RequestMapping("/ini")
 	public ModelAndView init() throws Exception{
 		ModelAndView mav = new ModelAndView("assetAmtSel");
 		

@@ -5,10 +5,10 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.test.vo.PayRcvSumVo;
+import com.example.demo.test.vo.EvntAssetStatVo;
 
 @Repository
 @Mapper
-public interface PayRcvSumDao {
-	List<PayRcvSumVo> lst(PayRcvSumVo payRcvSumVo);
+public interface EvntAssetStatDao {
+	List<EvntAssetStatVo> lst(EvntAssetStatVo evntAssetStatVo);
 }

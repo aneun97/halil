@@ -17,7 +17,7 @@ public class EvntAssetSelCtl {
 	@Autowired
 	EvntAssetSelSvc evntAssetSelSvc;
 	
-	@RequestMapping(value = "/init")
+	@RequestMapping(value = "/ini")
 	public ModelAndView init() {
 		ModelAndView mav = new ModelAndView("evntAssetSel");
 		return mav;

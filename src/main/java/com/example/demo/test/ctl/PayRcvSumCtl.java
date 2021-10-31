@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.test.svc.PayRcvSumSvc;
-import com.example.demo.test.vo.PayRcvSumVo;
+import com.example.demo.test.svc.EvntAssetStatSvc;
+import com.example.demo.test.vo.EvntAssetStatVo;
 
 @RestController
 @RequestMapping("/payRcvSum")
 public class PayRcvSumCtl {
 
 	@Autowired
-	PayRcvSumSvc payRcvSumSvc;
+	EvntAssetStatSvc payRcvSumSvc;
 	
 	@RequestMapping("/ini")
 	public ModelAndView ini() throws Exception{
@@ -24,11 +24,11 @@ public class PayRcvSumCtl {
 	}
 	
 	@RequestMapping("/lst")
-	public ModelAndView lst(PayRcvSumVo payRcvSumVo) throws Exception{
+	public ModelAndView lst(EvntAssetStatVo payRcvSumVo) throws Exception{
 		
 		ModelAndView mav = new ModelAndView("payRcvSum");
 		
-		List<PayRcvSumVo> rstLst = payRcvSumSvc.lst(payRcvSumVo);
+		List<EvntAssetStatVo> rstLst = payRcvSumSvc.lst(payRcvSumVo);
 		mav.addObject("rstLst", rstLst);
 		return mav;
 	}
