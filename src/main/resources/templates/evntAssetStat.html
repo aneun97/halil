@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"> 
+    <link th:href="@{/css/assetAmtSel.css}" rel="stylesheet" type="text/css">
+    <title>홈페이지</title>
+</head>
+<body>
+
+<div id="divMan">
+	<p>
+	<label>기준일 		</label>
+	<button type="button" id="btnSer" onclick="onClick_btnSer()">조회</button>
+	</p>
+	
+	<div id="total">
+	<h1 style="color: black">
+		<span>당월:  </span>
+		<span id="txtThsSumAmt"></span>
+		<span>원</span>
+	</h1>
+	<h1 style="color: black">
+		<span>전월:  </span>
+		<span id="txtBefSumAmt"></span>
+		<span>원</span>
+	</h1>
+	</div>
+
+
+	<div class="container1">
+		<div class="item" style="border: 2px dashed maroon">
+			<div class="cell">이벤트</div>
+			<div class="cell">당월</div>
+			<div class="cell">전월</div>
+			<div class="cell">차액</div>
+		</div>
+	</div>
+	<div class="grdStatList">
+	</div>
+</div>
+
+
+
+</body>
+<script th:src="@{/js/commonFunction.js}" charset="UTF-8"></script>
+<script th:src="@{/js/evntAssetStat.js}" charset="UTF-8"></script>
+</html>

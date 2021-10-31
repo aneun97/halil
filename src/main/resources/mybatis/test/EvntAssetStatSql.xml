@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.test.dao.EvntAssetStatDao"> 
+<select id="lst" resultType="EvntAssetStatVo">
+/* com.example.demo.test.dao.EvntAssetStatDao.lst */
+SELECT THS.evnt_hcls 				THS_EVNT_HCLS
+     , THS.kr_nm 					THS_KR_NM
+     , nvl(THS.sum_amt, 0) 			THS_SUM
+     , BEF.evnt_hcls 				BEF_EVNT_HCLS
+     , BEF.kr_nm 					BEF_KR_NM
+     , nvl(BEF.sum_amt, 0) 			BEF_SUM
+  FROM (
+			SELECT A.evnt_hcls
+			     , B.KR_NM
+			     , SUM(A.amt) sum_amt
+			  FROM evnt_asset 		A
+			     , info_evnt_hcls 	B
+			 WHERE 1=1
+			   AND A.EVNT_HCLS = B.EVNT_HCLS
+			   AND wk_dt BETWEEN #{THS_ST_DT} AND #{THS_ED_DT}
+			   AND A.evnt = 'E0001'
+			 GROUP BY A.evnt_hcls
+			 ) THS
+		left outer join ( 
+			SELECT A.evnt_hcls
+			     , B.KR_NM
+			     , SUM(A.amt) sum_amt
+			  FROM evnt_asset A
+			     , info_evnt_hcls B
+			 WHERE 1=1
+			   AND A.EVNT_HCLS = B.EVNT_HCLS
+			   AND wk_dt BETWEEN #{BEF_ST_DT} AND #{BEF_ED_DT}
+			   AND A.evnt = 'E0001'
+			 GROUP BY A.evnt_hcls
+			 ) BEF
+   on THS.evnt_hcls = BEF.evnt_hcls
+ 
+ 
+ union
+ 
+SELECT THS.evnt_hcls 			THS_EVNT_HCLS
+     , THS.kr_nm 				THS_KR_NM
+     , nvl(THS.sum_amt,0) 		THS_SUM
+     , BEF.evnt_hcls 			BEF_EVNT_HCLS
+     , BEF.kr_nm 				BEF_KR_NM
+     , nvl(BEF.sum_amt,0) 		BEF_SUM
+  FROM (
+			SELECT A.evnt_hcls
+			     , B.KR_NM
+			     , SUM(A.amt) sum_amt
+			  FROM evnt_asset A
+			     , info_evnt_hcls B
+			 WHERE 1=1
+			   AND A.EVNT_HCLS = B.EVNT_HCLS
+			   AND wk_dt BETWEEN #{THS_ST_DT} AND #{THS_ED_DT}
+			   AND A.evnt = 'E0001'
+			 GROUP BY A.evnt_hcls
+			 ) THS
+		right outer join ( 
+			SELECT A.evnt_hcls
+			     , B.KR_NM
+			     , SUM(A.amt) sum_amt
+			  FROM evnt_asset A
+			     , info_evnt_hcls B
+			 WHERE 1=1
+			   AND A.EVNT_HCLS = B.EVNT_HCLS
+			   AND wk_dt BETWEEN #{BEF_ST_DT} AND #{BEF_ED_DT}
+			   AND A.evnt = 'E0001'
+			 GROUP BY A.evnt_hcls
+			 ) BEF
+   on THS.evnt_hcls = BEF.evnt_hcls
+</select> 
+</mapper>
